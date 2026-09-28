@@ -82,3 +82,5 @@ runpy.run_path(str(S/'move_navigation.py'))
 runpy.run_path(str(S/'refine_isleia.py'))
 runpy.run_path(str(S/'final_visual_updates.py'))
 runpy.run_path(str(S/'fix_video_referrer.py'))
+
+runpy.run_path(str(S/'refresh_visuals.py'))

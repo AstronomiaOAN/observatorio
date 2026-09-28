@@ -1,0 +1,56 @@
+[
+  {
+    "file": "cumulo1.png",
+    "title": "Cúmulo",
+    "source": "https://espectra.astronomiaoan.co/vol3num1-cumulo.html",
+    "image": "https://espectra.astronomiaoan.co/images/cumulo1.png",
+    "caption": "Iniciativa estudiantil de divulgación astronómica nacida en 2023, con talleres, charlas y observación abiertos a la comunidad.",
+    "credit": "Cúmulo / Revista eSPECTRA, OAN",
+    "reuse": "Official logo reproduced to identify the semillero; no open license stated on source. Preserve original mark."
+  },
+  {
+    "file": "pillars.png",
+    "title": "Pilares de la Creación",
+    "source": "https://science.nasa.gov/asset/webb/pillars-of-creation-nircam-image/",
+    "image": "https://assets.science.nasa.gov/content/dam/science/missions/webb/science/2022/10/STScI-01GGF8H15VZ09MET9HFBRQX4S3.png/jcr:content/renditions/cq5dam.web.1280.1280.png",
+    "caption": "Gas, polvo y estrellas en formación en la nebulosa del Águila, vistos en infrarrojo cercano por Webb.",
+    "credit": "NASA, ESA, CSA, STScI; J. DePasquale, A. Koekemoer, A. Pagan (STScI).",
+    "reuse": "ESA/Webb also distributes this observation under CC BY 4.0. Include full visible credit. https://esawebb.org/copyright/"
+  },
+  {
+    "file": "rho-ophiuchi.png",
+    "title": "Rho Ophiuchi",
+    "source": "https://science.nasa.gov/asset/webb/rho-ophiuchi-nircam-image/",
+    "image": "https://assets.science.nasa.gov/content/dam/science/missions/webb/science/2023/07/STScI-01H44AVB69N1P8RAEJ12NW2RB2.png/jcr:content/renditions/cq5dam.web.1280.1280.png",
+    "caption": "Estrellas jóvenes y chorros de gas en una región de formación estelar a unos 390 años luz.",
+    "credit": "NASA, ESA, CSA, STScI, K. Pontoppidan (STScI), A. Pagan (STScI)",
+    "reuse": "CC BY 4.0 via https://esawebb.org/images/weic2316a/. Include full visible credit."
+  },
+  {
+    "file": "deep-field.png",
+    "title": "Primer campo profundo de Webb",
+    "source": "https://science.nasa.gov/asset/webb/webbs-first-deep-field-nircam-image/",
+    "image": "https://assets.science.nasa.gov/content/dam/science/missions/webb/science/2022/07/STScI-01G8H1K2BCNATEZSKVRN9Z69SR.png/jcr:content/renditions/cq5dam.web.1280.1280.png",
+    "caption": "El cúmulo SMACS 0723 amplifica la luz de galaxias lejanas mediante lentes gravitacionales.",
+    "credit": "NASA, ESA, CSA, and STScI",
+    "reuse": "CC BY 4.0 via https://esawebb.org/images/webb-first-deep-field/. Include full visible credit."
+  },
+  {
+    "file": "galaxy-m74.jpg",
+    "title": "Galaxia espiral M74",
+    "source": "https://science.nasa.gov/asset/hubble/spiral-galaxy-m74/",
+    "image": "https://assets.science.nasa.gov/content/dam/science/missions/hubble/releases/2007/11/STScI-01EVT6S8B5EQEH203JVEQ3SJ46.tif/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
+    "caption": "Los brazos espirales de M74, observados casi de frente por el telescopio Hubble.",
+    "credit": "NASA, ESA, and the Hubble Heritage (STScI/AURA)-ESA/Hubble Collaboration; Acknowledgment: R. Chandar (University of Toledo) and J. Miller (University of Michigan)",
+    "reuse": "NASA educational/editorial use with credit; Hubble image."
+  },
+  {
+    "file": "espectra-cover.png",
+    "title": "Revista eSPECTRA — Vol. 3, No. 1",
+    "source": "https://espectra.astronomiaoan.co/index-vol3num1.html",
+    "image": "https://espectra.astronomiaoan.co/images/Portada_vol3num1.png",
+    "caption": "Portada de la revista de divulgación del Observatorio Astronómico Nacional.",
+    "credit": "Revista eSPECTRA / Observatorio Astronómico Nacional",
+    "reuse": "Official cover for editorial identification; no open license established."
+  }
+]
