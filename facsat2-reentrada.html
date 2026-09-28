@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FACSAT-2: la caída de un satélite en el máximo solar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Newsreader:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --vacio:#070d1c;
+  --noche:#0d1730;
+  --panel:#101c36;
+  --linea:#25355a;
+  --tinta:#e9eff8;
+  --tinta-suave:#8fa2c2;
+  --tinta-tenue:#5f7198;
+  --frio:#4d86c6;
+  --calor:#e2622c;
+  --fuego:#ffb347;
+  --solar:#f5c542;
+  --aurora:#57e0a0;
+  --alerta:#ff5d73;
+  --cf2019:#f0a04b;
+  --cfmedio:#9b8cff;
+  --traza:#cfe8ff;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:
+    radial-gradient(1100px 700px at 80% -10%, #17264a 0%, transparent 60%),
+    var(--vacio);
+  color:var(--tinta);
+  font-family:"Newsreader",Georgia,"Times New Roman",serif;
+  font-weight:300;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  /* campo de estrellas discreto */
+  content:"";
+  position:fixed; inset:0; pointer-events:none; opacity:.5;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 27% 62%, #cfe0ff 50%, transparent 51%),
+    radial-gradient(1px 1px at 44% 11%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 58% 44%, #b9cdf0 50%, transparent 51%),
+    radial-gradient(1px 1px at 73% 25%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 88% 70%, #dce8ff 50%, transparent 51%),
+    radial-gradient(1px 1px at 95% 33%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 8% 84%, #cfe0ff 50%, transparent 51%);
+}
+
+.tablero{
+  position:relative;
+  min-height:100vh;
+  max-width:1440px;
+  margin:0 auto;
+  padding:22px 26px 18px;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  gap:18px;
+}
+
+/* ---------- cabecera ---------- */
+.cabecera{display:flex; align-items:baseline; gap:18px; flex-wrap:wrap; border-bottom:1px solid var(--linea); padding-bottom:12px}
+.marca{
+  font-family:"Archivo",system-ui,sans-serif;
+  font-weight:700; font-size:clamp(22px,2.4vw,32px);
+  letter-spacing:-.03em; margin:0; line-height:1;
+}
+.marca span{font-weight:400; color:var(--tinta-suave)}
+.sub{font-size:15px; color:var(--tinta-suave); margin:0; max-width:62ch; line-height:1.45}
+
+/* ---------- escenario ---------- */
+.escenario{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 188px 336px;
+  gap:20px;
+  min-height:0;
+}
+
+/* gráfica */
+.grafica{
+  position:relative;
+  background:#0b152c;
+  border:1px solid var(--linea);
+  border-radius:3px;
+  display:flex; flex-direction:column;
+  min-height:340px; min-width:0;
+}
+#lienzo{flex:1; width:100%; display:block; min-height:0}
+.pie-grafica{
+  font-size:12.5px; color:var(--tinta-suave);
+  padding:9px 12px 10px; line-height:1.45; border-top:1px solid #17253f;
+}
+.leyenda{display:grid; grid-template-columns:repeat(auto-fit,minmax(238px,1fr)); gap:4px 18px; margin:0}
+.leyenda div{display:flex; align-items:baseline; gap:8px}
+.leyenda b{font-weight:400; color:var(--tinta); white-space:nowrap}
+.muestra{flex:0 0 26px; height:0; border-top-width:3px; border-top-style:solid; position:relative; top:-4px}
+.m-real{border-color:#cfe8ff}
+.m-2019{border-color:#f0a04b; border-top-style:dashed}
+.m-medio{border-color:#9b8cff; border-top-style:dashed}
+.m-sol{border-color:#f5c542}
+.m-tor{border-color:#57e0a0; flex:0 0 26px; border-top-width:0; height:12px; border-left:3px solid #57e0a0; top:2px}
+.nota-leyenda{margin:8px 0 0; font-style:italic; color:var(--tinta-tenue); font-size:12px}
+
+/* altímetro */
+.altimetro{
+  position:relative;
+  border:1px solid var(--linea); border-radius:3px;
+  background:linear-gradient(180deg,
+    #060b1a 0%,
+    #0a1430 20%,
+    #12233f 38%,
+    #1d2f44 56%,
+    #4a3a44 71%,
+    #8c4430 82%,
+    #c2612c 89%,
+    #6d3a33 96%,
+    #24314e 100%);
+  overflow:hidden;
+}
+.marcas{position:absolute; inset:0; z-index:5}
+#cielo{position:absolute; left:0; top:0; width:100%; height:100%; z-index:3; pointer-events:none; display:block}
+.tierra{z-index:2}
+.estela,.satelite{z-index:6}
+.marca-h{position:absolute; left:0; right:0; border-top:1px dashed rgba(207,232,255,.22)}
+.marca-h b{
+  position:absolute; left:5px; top:3px;
+  font-family:"Archivo",sans-serif; font-weight:500; font-size:10.5px;
+  color:rgba(220,235,255,.62); letter-spacing:.01em;
+}
+.estela{
+  position:absolute; left:50%; top:0; width:2px; margin-left:-1px;
+  background:linear-gradient(180deg,rgba(207,232,255,0),rgba(207,232,255,.55));
+  height:0;
+}
+.satelite{
+  position:absolute; left:50%; top:0;
+  transform:translate(-50%,-50%);
+  width:44px; height:26px;
+  display:grid; place-items:center;
+}
+.satelite svg{overflow:visible}
+.calor{
+  position:absolute; left:50%; top:50%; width:54px; height:54px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,160,60,.85) 0%,rgba(255,90,30,.35) 45%,transparent 70%);
+  opacity:0; pointer-events:none;
+}
+.tierra{
+  position:absolute; left:50%; bottom:-2px;
+  width:150%; transform:translateX(-50%);
+  display:block; pointer-events:none;
+}
+
+/* relato */
+.relato{
+  display:flex; flex-direction:column; gap:14px;
+  min-width:0;
+}
+.reloj{
+  border:1px solid var(--linea); border-radius:3px;
+  background:var(--panel);
+  padding:12px 14px 13px;
+}
+.fecha{
+  font-family:"Archivo",sans-serif; font-weight:500; font-size:14px;
+  color:var(--tinta-suave); letter-spacing:.01em; margin:0 0 2px;
+}
+.altura-viva{
+  font-family:"Archivo",sans-serif; font-weight:700;
+  font-size:clamp(38px,4.6vw,54px); line-height:.94; letter-spacing:-.035em;
+  font-variant-numeric:tabular-nums; margin:0;
+  color:var(--traza);
+}
+.altura-viva i{font-style:normal; font-size:.34em; font-weight:500; color:var(--tinta-suave); letter-spacing:0; margin-left:6px}
+.medidas{
+  display:grid; grid-template-columns:1fr 1fr; gap:1px;
+  margin-top:12px; background:var(--linea); border:1px solid var(--linea);
+}
+.medida{background:var(--panel); padding:7px 9px 8px}
+.medida dt{font-size:12px; color:var(--tinta-tenue); margin:0 0 1px}
+.medida dd{
+  margin:0; font-family:"Archivo",sans-serif; font-weight:600; font-size:16px;
+  font-variant-numeric:tabular-nums; letter-spacing:-.01em;
+}
+.medida.solar dd{color:var(--solar)}
+.medida.geo dd{color:var(--aurora)}
+
+.texto{
+  border:1px solid var(--linea); border-radius:3px;
+  background:var(--panel);
+  padding:14px 15px 15px;
+  flex:1; min-height:0; overflow:auto;
+  display:flex; flex-direction:column; gap:10px;
+}
+.texto h2{
+  font-family:"Archivo",sans-serif; font-weight:600;
+  font-size:18px; letter-spacing:-.015em; margin:0; line-height:1.2;
+}
+.texto p{margin:0; font-size:16.5px; line-height:1.58; color:#d3ddee; max-width:46ch}
+.fichas{display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; padding-top:4px}
+.ficha{
+  font-family:"Archivo",sans-serif; font-size:12px; font-weight:500;
+  border:1px solid var(--linea); border-radius:2px;
+  padding:3px 7px; color:var(--tinta-suave);
+  font-variant-numeric:tabular-nums;
+}
+.ficha.viva{border-color:#5a4a20; color:var(--solar)}
+.ficha.geo{border-color:#26543f; color:var(--aurora)}
+
+.entrando{animation:entrar .5s ease both}
+@keyframes entrar{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+
+/* balance final */
+.balance{display:none; flex-direction:column; gap:9px}
+.balance.visible{display:flex}
+.barra{display:grid; grid-template-columns:1fr; gap:3px}
+.barra .et{display:flex; justify-content:space-between; font-size:13.5px; color:var(--tinta-suave); gap:10px}
+.barra .et b{font-family:"Archivo",sans-serif; font-weight:600; color:var(--tinta); font-variant-numeric:tabular-nums}
+.barra .via{height:7px; background:#16233d; border-radius:1px; overflow:hidden}
+.barra .via i{display:block; height:100%; background:var(--frio); width:0; transition:width .9s cubic-bezier(.2,.7,.2,1)}
+.barra.real .via i{background:var(--traza)}
+.barra.d2019 .via i{background:var(--cf2019)}
+.barra.medio .via i{background:var(--cfmedio)}
+.barra.geo .via i{background:var(--aurora)}
+
+/* ---------- controles ---------- */
+.control{
+  border-top:1px solid var(--linea);
+  padding-top:12px;
+  display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+}
+button{
+  font-family:"Archivo",sans-serif; font-size:13.5px; font-weight:500;
+  background:transparent; color:var(--tinta); border:1px solid var(--linea);
+  border-radius:2px; padding:7px 13px; cursor:pointer;
+  transition:border-color .15s, color .15s;
+}
+button:hover{border-color:#3f5688; color:#fff}
+button:focus-visible, .hito:focus-visible, #barrido:focus-visible{outline:2px solid var(--solar); outline-offset:2px}
+#reproducir{min-width:118px; border-color:#3f5688}
+
+.hitos{display:flex; flex:1; min-width:240px; gap:2px; align-items:stretch}
+.hito{
+  flex:1; position:relative; height:34px; background:transparent;
+  border:0; border-bottom:2px solid #1d2c4b; cursor:pointer; padding:0;
+  font-family:"Archivo",sans-serif; font-size:10.5px; color:var(--tinta-tenue);
+  display:flex; align-items:flex-end; justify-content:center; padding-bottom:5px;
+  overflow:hidden; white-space:nowrap; text-overflow:ellipsis;
+  transition:color .2s, border-color .2s;
+}
+.hito:hover{color:var(--tinta-suave)}
+.hito.pasado{border-bottom-color:#37517f; color:var(--tinta-suave)}
+.hito.actual{border-bottom-color:var(--solar); color:var(--solar)}
+.progreso-hito{position:absolute; left:0; bottom:0; height:2px; background:var(--solar); width:0}
+
+.fuente{
+  font-size:12.5px; color:var(--tinta-tenue); line-height:1.5;
+  border-top:1px solid #16233d; padding-top:9px; margin:0;
+}
+.fuente em{font-style:italic}
+
+@media (max-width:1080px){
+  .escenario{grid-template-columns:minmax(0,1fr) 150px 292px}
+  .texto p{font-size:15.5px}
+}
+@media (max-width:860px){
+  .tablero{padding:16px 14px 14px; gap:14px}
+  .escenario{
+    grid-template-columns:118px minmax(0,1fr);
+    grid-template-areas:"alt rel" "gra gra";
+    grid-template-rows:auto 280px;
+  }
+  .altimetro{grid-area:alt; min-height:300px}
+  .relato{grid-area:rel}
+  .grafica{grid-area:gra; min-height:0}
+  .texto{overflow:visible}
+  .altura-viva{font-size:40px}
+  .hitos{order:3; width:100%; flex:auto}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .entrando{animation:none}
+  .barra .via i{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="tablero">
+
+  <header class="cabecera">
+    <h1 class="marca">FACSAT-2 <span>Chiribiquete</span></h1>
+    <p class="sub">El segundo satélite de la Fuerza Aeroespacial Colombiana fue proyectado para permanecer quince años en órbita. Reentró a los 926 días. La secuencia reconstruye el descenso día a día y el papel que tuvo la actividad solar.</p>
+  </header>
+
+  <main class="escenario">
+
+    <section class="grafica" aria-label="Altura orbital y flujo solar en el tiempo">
+      <canvas id="lienzo"></canvas>
+      <div class="pie-grafica">
+        <div class="leyenda">
+          <div><span class="muestra m-real"></span><span><b>Altura observada</b> del satélite. La escala parte de la superficie terrestre, en cero, y llega a 540 km.</span></div>
+          <div><span class="muestra m-sol"></span><span><b>Actividad solar observada</b>, en el índice de flujo F10.7. Un ciclo típico promedia unas 120 unidades.</span></div>
+          <div><span class="muestra m-2019"></span><span><b>Escenario del pronóstico de 2019</b>: abajo, la actividad prevista; arriba, la trayectoria que habría resultado de ella.</span></div>
+          <div><span class="muestra m-medio"></span><span><b>Ciclo solar promedio</b>: la trayectoria correspondiente a un ciclo de intensidad ordinaria.</span></div>
+          <div><span class="muestra m-tor"></span><span><b>Tormentas geomagnéticas</b>. La altura de la marca indica su intensidad.</span></div>
+          <div><span class="muestra" style="border-color:#ffb347"></span><span><b>Franja cálida del fondo</b>: la densidad atmosférica crece hacia abajo y con ella el frenado.</span></div>
+        </div>
+        <p class="nota-leyenda">Las dos trayectorias punteadas aparecen al cierre, al contrastar lo ocurrido con lo previsto.</p>
+      </div>
+    </section>
+
+    <section class="altimetro" aria-label="El Sol, el satélite cayendo y la Tierra">
+      <canvas id="cielo"></canvas>
+      <div class="marcas" id="marcas"></div>
+      <div class="estela" id="estela"></div>
+      <div class="satelite" id="satelite">
+        <div class="calor" id="calor"></div>
+        <svg width="44" height="22" viewBox="0 0 44 22" aria-hidden="true">
+          <rect x="17" y="5" width="10" height="12" rx="1.2" fill="#dfe9f8" stroke="#7f93b5" stroke-width=".8"/>
+          <rect x="19" y="7" width="6" height="3" fill="#2a3b5c"/>
+          <rect x="2" y="8.5" width="13" height="5" fill="#2f5f9c" stroke="#8bb6e6" stroke-width=".7"/>
+          <rect x="29" y="8.5" width="13" height="5" fill="#2f5f9c" stroke="#8bb6e6" stroke-width=".7"/>
+          <line x1="15" y1="11" x2="17" y2="11" stroke="#8bb6e6" stroke-width="1"/>
+          <line x1="27" y1="11" x2="29" y2="11" stroke="#8bb6e6" stroke-width="1"/>
+        </svg>
+      </div>
+      <svg class="tierra" viewBox="0 0 220 132" preserveAspectRatio="xMidYMax meet" aria-label="La Tierra vista desde la órbita">
+        <defs>
+          <clipPath id="globo"><circle cx="110" cy="196" r="164"/></clipPath>
+          <radialGradient id="mar" cx="42%" cy="8%" r="88%">
+            <stop offset="0" stop-color="#3a8fc4"/>
+            <stop offset=".45" stop-color="#1d5b8e"/>
+            <stop offset="1" stop-color="#0c2848"/>
+          </radialGradient>
+          <linearGradient id="aire" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#8fd4ff" stop-opacity="0"/>
+            <stop offset=".55" stop-color="#8fd4ff" stop-opacity=".22"/>
+            <stop offset="1" stop-color="#d8f0ff" stop-opacity=".55"/>
+          </linearGradient>
+        </defs>
+        <circle cx="110" cy="196" r="182" fill="url(#aire)"/>
+        <circle cx="110" cy="196" r="168" fill="#8fd4ff" opacity=".16"/>
+        <circle cx="110" cy="196" r="164" fill="url(#mar)"/>
+        <g clip-path="url(#globo)">
+          <path d="M64,44 C76,36 92,34 104,40 C112,44 118,42 126,44 C136,47 142,56 139,68
+                   C136,82 128,94 121,110 C115,124 110,134 105,134 C100,134 97,124 95,112
+                   C92,96 80,88 74,74 C68,60 58,52 64,44 Z" fill="#407d52" opacity=".95"/>
+          <path d="M72,44 C82,38 95,38 103,43 C99,52 92,58 84,58 C77,58 72,52 72,44 Z" fill="#57996a" opacity=".95"/>
+          <path d="M20,30 C34,24 50,26 58,34 C48,42 32,44 20,38 Z" fill="#3f7a53" opacity=".8"/>
+          <path d="M170,36 C186,28 206,32 214,44 C202,54 182,54 170,46 Z" fill="#3f7a53" opacity=".7"/>
+          <g fill="#ffffff" opacity=".33">
+            <ellipse cx="52" cy="58" rx="26" ry="7"/>
+            <ellipse cx="148" cy="52" rx="30" ry="8"/>
+            <ellipse cx="104" cy="80" rx="22" ry="6"/>
+            <ellipse cx="188" cy="74" rx="18" ry="5"/>
+          </g>
+        </g>
+        <circle cx="110" cy="196" r="164" fill="none" stroke="#cdeeff" stroke-width="1.4" opacity=".85"/>
+      </svg>
+    </section>
+
+    <section class="relato">
+      <div class="reloj">
+        <p class="fecha" id="fecha">15 de abril de 2023</p>
+        <p class="altura-viva"><span id="alturaNum">497</span><i>km sobre la Tierra</i></p>
+        <dl class="medidas">
+          <div class="medida"><dt>Baja cada día</dt><dd id="tasa">0,06 km</dd></div>
+          <div class="medida"><dt>Días en el espacio</dt><dd id="dias">0</dd></div>
+          <div class="medida solar"><dt>Actividad del Sol (normal: 120)</dt><dd id="flujo">150</dd></div>
+          <div class="medida"><dt>Vueltas a la Tierra</dt><dd id="revs">0</dd></div>
+        </dl>
+      </div>
+
+      <article class="texto">
+        <div id="narracion">
+          <h2 id="titulo">Despliegue</h2>
+          <p id="cuerpo"></p>
+        </div>
+        <div class="balance" id="balance">
+          <h2>Duración estimada bajo distintos escenarios solares</h2>
+          <p style="font-size:15.5px">Resultado de repetir la simulación con el mismo vehículo y la misma órbita, sustituyendo únicamente el forzamiento solar:</p>
+          <div class="barra real"><div class="et"><span>Forzamiento observado, 2023–2025</span><b>2,5 años</b></div><div class="via"><i data-ancho="14"></i></div></div>
+          <div class="barra geo"><div class="et"><span>Sin actividad geomagnética</span><b>2,8 años</b></div><div class="via"><i data-ancho="15.5"></i></div></div>
+          <div class="barra d2019"><div class="et"><span>Escenario del pronóstico de 2019</span><b>3,8 años</b></div><div class="via"><i data-ancho="21"></i></div></div>
+          <div class="barra medio"><div class="et"><span>Ciclo solar promedio</span><b>5,4 años</b></div><div class="via"><i data-ancho="30"></i></div></div>
+          <div class="barra"><div class="et"><span>Mínimo solar permanente</span><b>18 años</b></div><div class="via"><i data-ancho="100"></i></div></div>
+          <p style="font-size:15.5px">Para una misión equivalente, alcanzar cinco años de permanencia exigiría una inyección próxima a 560 km, con margen hasta 580, o una capacidad propulsiva de 30 a 70 m/s. Conviene además comunicar la vida esperada como un rango asociado al escenario solar y no como una cifra única.</p>
+        </div>
+        <div class="fichas" id="fichas"></div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="control">
+      <button id="reproducir" aria-label="Pausar la secuencia">Pausar</button>
+      <button id="reiniciar">Volver al inicio</button>
+      <button id="sonido" aria-pressed="false">Sonido</button>
+      <div class="hitos" id="hitos" role="tablist" aria-label="Momentos de la misión"></div>
+    </div>
+    <p class="fuente">La escena de la derecha es un esquema, no una representación a escala: el Sol se encuentra a unos 150 millones de kilómetros, frente a los 500 km que separaban al satélite de la superficie terrestre, como indica la marca de corte. El viento solar y las auroras están ilustrados de forma cualitativa y su intensidad sigue los índices medidos de cada día. Los datos proceden del estudio de <em>Vargas Domínguez, Angel y Buitrago (Observatorio Astronómico Nacional, Universidad Nacional de Colombia)</em>, que reconstruyó el decaimiento a partir de 3696 registros de seguimiento. La barra espaciadora reproduce o pausa la secuencia; las flechas desplazan entre momentos; el botón de sonido activa el acompañamiento.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============ datos ============ */
+const T0 = Date.UTC(2023,3,15);                 // despliegue
+const DIA = 86400000;
+const VIDA = 926;                                // días hasta la reentrada
+
+// cruces de nivel publicados (altura media esférica a - R_E)
+const CRUCES = [
+  ["2023-04-15",497.0],["2023-12-05",480],["2024-08-29",450],["2025-03-03",400],
+  ["2025-07-27",350],["2025-10-02",300],["2025-10-21",250],["2025-10-27",200]
+];
+const dK = CRUCES.map(c=> (Date.parse(c[0]+"T00:00:00Z")-T0)/DIA );
+const hK = CRUCES.map(c=> c[1]);
+
+// F10.7 mensual (reconstrucción esquemática; media de misión medida: 170,8 sfu)
+const FLUJO = [
+  ["2023-04",150],["2023-05",155],["2023-06",160],["2023-07",166],["2023-08",160],
+  ["2023-09",150],["2023-10",156],["2023-11",166],["2023-12",170],
+  ["2024-01",170],["2024-02",180],["2024-03",176],["2024-04",162],["2024-05",180],
+  ["2024-06",174],["2024-07",196],["2024-08",253],["2024-09",220],["2024-10",202],
+  ["2024-11",190],["2024-12",194],
+  ["2025-01",184],["2025-02",176],["2025-03",170],["2025-04",160],["2025-05",150],
+  ["2025-06",146],["2025-07",146],["2025-08",160],["2025-09",154],["2025-10",166]
+];
+const fD = FLUJO.map(f=> (Date.parse(f[0]+"-15T00:00:00Z")-T0)/DIA );
+const fV = FLUJO.map(f=> f[1] );
+
+// tormentas nombradas en el artículo
+const TORMENTAS = [
+  {f:"2024-05-11", dst:406, nom:"Gannon"},
+  {f:"2024-10-10", dst:335, nom:"octubre 2024"},
+  {f:"2025-10-12", dst:120, nom:"octubre 2025"}
+];
+TORMENTAS.forEach(t=> t.d = (Date.parse(t.f+"T00:00:00Z")-T0)/DIA );
+
+const ESCENAS = [
+  {f:"2023-04-15", t:"Puesta en órbita", et:"Lanzamiento",
+   c:"El 15 de abril de 2023 el FACSAT-2 fue desplegado por el vuelo Transporter-7, una misión compartida que situó decenas de satélites pequeños cerca de los 500 km de altura. El vehículo es un CubeSat de seis unidades y 7,5 kg, con una cámara multiespectral de 4,75 m de resolución. La misión anunció cinco años de operación y quince de permanencia en órbita.",
+   fi:["vuelo Transporter-7","7,5 kg","unos 500 km"]},
+  {f:"2023-12-05", t:"El primer año", et:"Primer año",
+   c:"A esa altura persiste una atmósfera muy tenue que frena de forma continua a cualquier objeto sin propulsión. Durante el primer año el descenso fue de diecisiete kilómetros, menos de 0,1 km por día. Con esa tasa, la permanencia anunciada resultaba verosímil.",
+   fi:["17 km en 234 días","480 km"]},
+  {f:"2024-02-20", t:"Un ciclo solar más intenso de lo previsto", et:"El Sol",
+   c:"La actividad del Sol varía en ciclos de unos once años. El pronóstico oficial de 2019 anticipaba un máximo moderado, pero el ciclo 25 lo superó con amplio margen. La radiación ultravioleta calienta la alta atmósfera, que se expande y eleva su densidad a la altura de vuelo. El frenado aumentó en la misma medida.",
+   fi:["previsto: 139 sfu","observado: 170,8 sfu"], sol:true},
+  {f:"2024-05-11", t:"La tormenta del 11 de mayo de 2024", et:"Tormenta",
+   c:"Ese día se registró la tormenta geomagnética más intensa en dos décadas, con un mínimo del índice Dst de −406 nT y auroras visibles en latitudes inusualmente bajas. El frenado se triplicó durante la jornada y regresó a su nivel de fondo en unos cinco días. El efecto fue considerable, pero breve.",
+   fi:["Dst −406 nT","frenado ×3,4"], geo:true},
+  {f:"2024-08-29", t:"El máximo de actividad", et:"Máximo solar",
+   c:"Agosto de 2024 concentró la mayor actividad solar de la misión, con un flujo medio de 253 unidades. El 29 de agosto el satélite cruzó los 450 km. Habían transcurrido 502 días y la pérdida acumulada era de 47 kilómetros, con una pendiente en aumento sostenido.",
+   fi:["253 sfu","450 km"], sol:true},
+  {f:"2024-10-10", t:"El peso relativo de las tormentas", et:"El calor diario",
+   c:"Se contabilizaron 149 tormentas a lo largo de la misión. En conjunto explican cerca de la quinta parte del tiempo de vida perdido. El factor dominante fue el calentamiento sostenido de la termosfera, que actuó de manera continua durante dos años y medio.",
+   fi:["149 tormentas","≈20 % del acortamiento"], geo:true},
+  {f:"2025-03-03", t:"Pérdida de capacidad de observación", et:"La cámara",
+   c:"El descenso degradó también el desempeño de la carga útil. La franja cubierta por la cámara se redujo de 19,4 a unos 13,6 kilómetros, lo que dificultó completar la cobertura del territorio en los plazos previstos. La órbita perdió además su carácter heliosincrónico, con una deriva acumulada de 1,8 horas en la hora solar local.",
+   fi:["franja −30 %","1,8 h de deriva"]},
+  {f:"2025-07-27", t:"El descenso se acelera", et:"Se acelera",
+   c:"La densidad atmosférica crece de forma exponencial hacia abajo, con una altura de escala de 59 kilómetros. El tramo de 400 a 300 km tomó 234 días; los 300 kilómetros restantes se recorrieron en 25.",
+   fi:["350 km","altura de escala: 59 km"]},
+  {f:"2025-10-02", t:"Últimas semanas", et:"Últimos días",
+   c:"Por debajo de 300 km la tasa de descenso superó el kilómetro diario y alcanzó más de diez en los días finales. Las perturbaciones geomagnéticas de octubre de 2025 encontraron al satélite ya en ese régimen y pudieron modificar la fecha en días, no en meses.",
+   fi:["> 1 km/día","luego > 10 km/día"], geo:true},
+  {f:"2025-10-27", t:"Reentrada", et:"Reentrada",
+   c:"El 27 de octubre de 2025 el FACSAT-2 reentró en la atmósfera y se desintegró, tras 926 días en órbita y 14 241 vueltas a la Tierra.",
+   fi:["926 días","2,54 años","se anunciaron 15"]}
+];
+ESCENAS.forEach(e=> e.d = (Date.parse(e.f+"T00:00:00Z")-T0)/DIA );
+
+/* ============ interpolación monótona (Fritsch–Carlson) ============ */
+function monotona(xs,ys){
+  const n=xs.length, dx=[], dy=[], m=[];
+  for(let i=0;i<n-1;i++){dx.push(xs[i+1]-xs[i]); dy.push((ys[i+1]-ys[i])/(xs[i+1]-xs[i]));}
+  m[0]=dy[0]; m[n-1]=dy[n-2];
+  for(let i=1;i<n-1;i++) m[i]=(dy[i-1]*dy[i]<=0)?0:(dy[i-1]+dy[i])/2;
+  for(let i=0;i<n-1;i++){
+    if(dy[i]===0){m[i]=0;m[i+1]=0;continue;}
+    const a=m[i]/dy[i], b=m[i+1]/dy[i], s=a*a+b*b;
+    if(s>9){const t=3/Math.sqrt(s); m[i]=t*a*dy[i]; m[i+1]=t*b*dy[i];}
+  }
+  return function(x){
+    if(x<=xs[0]) return ys[0];
+    if(x>=xs[n-1]) return ys[n-1];
+    let i=0; while(x>xs[i+1]) i++;
+    const h=xs[i+1]-xs[i], t=(x-xs[i])/h, t2=t*t, t3=t2*t;
+    return ys[i]*(2*t3-3*t2+1)+m[i]*h*(t3-2*t2+t)+ys[i+1]*(-2*t3+3*t2)+m[i+1]*h*(t3-t2);
+  };
+}
+const hDe = monotona(dK,hK);
+const fDe = monotona(fD,fV);
+
+function alturaEn(d){ return d>=VIDA ? 75 : hDe(Math.max(0,d)); }
+function tasaEn(d){
+  const a=alturaEn(Math.max(0,d-1.5)), b=alturaEn(Math.min(VIDA,d+1.5));
+  return Math.max(0.01,(a-b)/3);
+}
+function flujoEn(d){ return fDe(Math.min(Math.max(d,fD[0]),fD[fD.length-1])); }
+
+// escenario derivado del pronóstico de 2019 (Hathaway con A = 115)
+function g(x){ return Math.pow(x,3)/(Math.exp(x*x)-0.71); }
+const GMAX = g(1.081);
+function flujo2019(d){
+  const anios = (d/365.25) + 3.0;           // el despliegue cae 3,0 años tras abr-2020
+  const x = anios/4.86;
+  if(x<=0) return 73;
+  return 73 + 0.70*(115*g(x)/GMAX);
+}
+
+// revoluciones acumuladas
+const MU=398600.4418, RE=6378.137;
+function nRev(h){ const a=h+RE; return 86400/(2*Math.PI)*Math.sqrt(MU/(a*a*a)); }
+const REVS=[0];
+for(let d=1; d<=VIDA; d++) REVS[d]=REVS[d-1]+nRev(alturaEn(d-0.5));
+function revsEn(d){ const i=Math.floor(Math.min(d,VIDA)); return REVS[i]||0; }
+
+// contrafactuales: mismo perfil normalizado, otra duración
+function cf(d,anios){ const L=anios*365.25; return d>=L?120:alturaEn(d*VIDA/L); }
+
+/* ============ estado ============ */
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let dia=0, jugando=!reduce, espera=0, fase="lanzamiento", revelado=0, ultimo=performance.now(), ultimaCuenta=null;
+let iEscena=-1, vistas=new Set();
+const XFIN_A = (Date.UTC(2026,0,1)-T0)/DIA;
+const XFIN_B = (Date.UTC(2029,1,1)-T0)/DIA;
+let xFin = XFIN_A;
+
+/* ============ nodos ============ */
+const $=s=>document.querySelector(s);
+const lienzo=$("#lienzo"), ctx=lienzo.getContext("2d");
+const elFecha=$("#fecha"), elAlt=$("#alturaNum"), elTasa=$("#tasa"), elDias=$("#dias"),
+      elFlujo=$("#flujo"), elRevs=$("#revs"), elTit=$("#titulo"), elCuerpo=$("#cuerpo"),
+      elFichas=$("#fichas"), elSat=$("#satelite"), elEstela=$("#estela"), elCalor=$("#calor"),
+      elBalance=$("#balance"), elNarr=$("#narracion"), elPlay=$("#reproducir");
+
+const MESES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+function fechaDe(d){ const t=new Date(T0+d*DIA); return t.getUTCDate()+" de "+MESES[t.getUTCMonth()]+" de "+t.getUTCFullYear(); }
+function num(v,dec){ return v.toFixed(dec).replace(".",","); }
+
+/* ============ altímetro ============ */
+const H_TOP=520, H_BOT=0, BANDA=32;   // 25 % superior reservado para el Sol
+let FONDO=76;                          // % donde queda el borde de la atmósfera
+function yAlt(h){ return BANDA + (H_TOP-h)/(H_TOP-H_BOT)*(FONDO-BANDA); }
+const NIVELES=[500,400,300,200,100], marcasDOM=[];
+(function marcas(){
+  const cont=$("#marcas");
+  NIVELES.forEach(h=>{
+    const d=document.createElement("div");
+    d.className="marca-h"; d.style.top=yAlt(h)+"%";
+    d.innerHTML="<b>"+h+"</b>";
+    cont.appendChild(d); marcasDOM.push(d);
+  });
+})();
+function recolocarMarcas(){ NIVELES.forEach((h,i)=> marcasDOM[i].style.top=yAlt(h)+"%"); }
+
+/* ============ hitos ============ */
+const contHitos=$("#hitos");
+ESCENAS.forEach((e,i)=>{
+  const b=document.createElement("button");
+  b.className="hito"; b.type="button";
+  b.innerHTML='<span class="progreso-hito"></span>'+(e.et||e.t);
+  b.title=e.t+" — "+fechaDe(e.d);
+  b.addEventListener("click",()=>saltarA(i));
+  contHitos.appendChild(b);
+  e.nodo=b;
+});
+
+/* ============ narración ============ */
+function mostrarEscena(i,animar){
+  if(i===iEscena) return;
+  iEscena=i; vistas.add(i);
+  const e=ESCENAS[i];
+  elTit.textContent=e.t;
+  elCuerpo.textContent=e.c;
+  elFichas.innerHTML="";
+  e.fi.forEach(f=>{
+    const s=document.createElement("span");
+    s.className="ficha"+(e.sol?" viva":e.geo?" geo":"");
+    s.textContent=f; elFichas.appendChild(s);
+  });
+  if(e.geo && typeof dispararTormenta==="function") dispararTormenta();
+  Sonido.escena(i);
+  if(animar && !reduce){ elNarr.classList.remove("entrando"); void elNarr.offsetWidth; elNarr.classList.add("entrando"); }
+  ESCENAS.forEach((x,j)=>{
+    x.nodo.classList.toggle("actual", j===i);
+    x.nodo.classList.toggle("pasado", j<i);
+  });
+}
+function mostrarBalance(){
+  elNarr.style.display="none";
+  elBalance.classList.add("visible");
+  elFichas.innerHTML="";
+  requestAnimationFrame(()=>{
+    elBalance.querySelectorAll(".via i").forEach(i=> i.style.width=i.dataset.ancho+"%");
+  });
+}
+function ocultarBalance(){
+  elNarr.style.display="";
+  elBalance.classList.remove("visible");
+  elBalance.querySelectorAll(".via i").forEach(i=> i.style.width="0");
+}
+
+/* ============ lienzo ============ */
+let W=0,Hc=0,dpr=1;
+function medir(){
+  dpr=Math.min(window.devicePixelRatio||1,2);
+  const r=lienzo.getBoundingClientRect();
+  W=r.width; Hc=r.height;
+  lienzo.width=Math.round(W*dpr); lienzo.height=Math.round(Hc*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+new ResizeObserver(medir).observe(lienzo);
+new ResizeObserver(()=>{ if(typeof medirCielo==='function') medirCielo(); }).observe(document.querySelector('.altimetro'));
+
+const PL=44, PR=12, PT=12, PB=24, GAP=20;
+function dibujar(){
+  if(!W||!Hc) return;
+  ctx.clearRect(0,0,W,Hc);
+  const anchoP=W-PL-PR;
+  const altoTot=Hc-PT-PB-GAP;
+  const h1=Math.round(altoTot*0.63), h2=altoTot-h1;
+  const y1=PT, y2=PT+h1+GAP;
+  const x=d=> PL + (d/xFin)*anchoP;
+  const yA=h=> y1 + (540-h)/540*h1;
+  const yF=f=> y2 + (270-f)/(270-60)*h2;
+
+  // bandas térmicas de fondo
+  const g1=ctx.createLinearGradient(0,y1,0,y1+h1);
+  g1.addColorStop(0,"rgba(77,134,198,0.05)");
+  g1.addColorStop(.55,"rgba(120,120,170,0.07)");
+  g1.addColorStop(.85,"rgba(226,98,44,0.13)");
+  g1.addColorStop(1,"rgba(255,179,71,0.24)");
+  ctx.fillStyle=g1; ctx.fillRect(PL,y1,anchoP,h1);
+
+  ctx.font='500 10.5px Archivo, system-ui, sans-serif';
+  ctx.textBaseline="middle";
+
+  // rejilla de altura
+  ctx.strokeStyle="rgba(140,165,205,.16)"; ctx.lineWidth=1;
+  [500,400,300,200,100].forEach(h=>{
+    const y=yA(h)+.5;
+    ctx.beginPath(); ctx.moveTo(PL,y); ctx.lineTo(W-PR,y); ctx.stroke();
+    ctx.fillStyle="rgba(143,162,194,.8)"; ctx.textAlign="right";
+    ctx.fillText(h,PL-7,y);
+  });
+  // la superficie de la Tierra: el cero de la escala
+  const ySup=yA(0)+.5;
+  ctx.strokeStyle="rgba(255,214,160,.55)"; ctx.lineWidth=1.6;
+  ctx.beginPath(); ctx.moveTo(PL,ySup); ctx.lineTo(W-PR,ySup); ctx.stroke();
+  ctx.fillStyle="rgba(255,214,160,.8)"; ctx.textAlign="right"; ctx.fillText("0",PL-7,ySup-5);
+  ctx.textAlign="left"; ctx.font='400 10px Archivo, system-ui, sans-serif';
+  ctx.fillText("superficie de la Tierra",PL+9,ySup-7);
+  ctx.font='500 10.5px Archivo, system-ui, sans-serif';
+  ctx.fillStyle="rgba(95,113,152,.9)"; ctx.textAlign="right";
+  ctx.fillText("km",PL-7,yA(530)+8);
+
+  // rejilla de flujo
+  [100,200].forEach(f=>{
+    const y=yF(f)+.5;
+    ctx.strokeStyle="rgba(140,165,205,.13)";
+    ctx.beginPath(); ctx.moveTo(PL,y); ctx.lineTo(W-PR,y); ctx.stroke();
+    ctx.fillStyle="rgba(143,162,194,.7)"; ctx.textAlign="right";
+    ctx.fillText(f,PL-7,y);
+  });
+  ctx.fillStyle="rgba(95,113,152,.9)";
+  ctx.fillText("sfu",PL-7,yF(268));
+
+  // eje temporal
+  ctx.textAlign="center"; ctx.fillStyle="rgba(143,162,194,.75)";
+  const anios=[2023,2024,2025,2026,2027,2028,2029];
+  anios.forEach(a=>{
+    const d=(Date.UTC(a,0,1)-T0)/DIA;
+    if(d<-20||d>xFin) return;
+    const px=x(Math.max(d,0));
+    ctx.strokeStyle="rgba(140,165,205,.12)";
+    ctx.beginPath(); ctx.moveTo(px+.5,y1); ctx.lineTo(px+.5,y2+h2); ctx.stroke();
+    ctx.fillText(a,px,y2+h2+12);
+  });
+
+  // títulos de cada panel
+  ctx.textAlign="left"; ctx.font='600 11.5px Archivo, system-ui, sans-serif';
+  ctx.fillStyle="rgba(207,232,255,.92)";
+  ctx.fillText("Altura del satélite sobre la superficie de la Tierra", PL+9, y1+11);
+  ctx.fillStyle="rgba(245,197,66,.95)";
+  ctx.fillText("Qué tan activo estuvo el Sol", PL+9, y2+11);
+
+  // tormentas
+  TORMENTAS.forEach(t=>{
+    if(t.d>dia) return;
+    const px=x(t.d), alt=Math.min(h2*.85,(t.dst/420)*h2*.9);
+    ctx.strokeStyle="rgba(87,224,160,.5)"; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(px,y2+h2); ctx.lineTo(px,y2+h2-alt); ctx.stroke();
+    if(t.dst>300){
+      ctx.fillStyle="rgba(87,224,160,.9)";
+      ctx.beginPath(); ctx.arc(px,y2+h2-alt,2.6,0,7); ctx.fill();
+    }
+  });
+
+  // flujo: escenario 2019
+  ctx.strokeStyle="rgba(240,160,75,.75)"; ctx.lineWidth=1.6; ctx.setLineDash([5,4]);
+  ctx.beginPath();
+  for(let d=0; d<=Math.min(dia,VIDA); d+=4){
+    const p=[x(d),yF(flujo2019(d))];
+    d===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]);
+  }
+  ctx.stroke(); ctx.setLineDash([]);
+
+  // flujo observado
+  ctx.strokeStyle="#f5c542"; ctx.lineWidth=1.8;
+  ctx.beginPath();
+  for(let d=0; d<=Math.min(dia,VIDA); d+=3){
+    const p=[x(d),yF(flujoEn(d))];
+    d===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]);
+  }
+  ctx.stroke();
+
+  // contrafactuales de altura (revelados al final)
+  if(revelado>0){
+    ctx.save(); ctx.globalAlpha=revelado;
+    [[3.83,"#f0a04b","escenario de 2019: 3,83 años"],[5.36,"#9b8cff","ciclo promedio: 5,36 años"]].forEach((c,k)=>{
+      const L=c[0]*365.25, hasta=L*revelado;
+      ctx.strokeStyle=c[1]; ctx.lineWidth=1.7; ctx.setLineDash([6,5]);
+      ctx.beginPath();
+      for(let d=0; d<=hasta; d+=6){
+        const p=[x(d),yA(Math.max(cf(d,c[0]),0))];
+        d===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]);
+      }
+      ctx.stroke(); ctx.setLineDash([]);
+      if(revelado>.75){
+        ctx.fillStyle=c[1]; ctx.textAlign="right"; ctx.globalAlpha=(revelado-.75)*4*1;
+        ctx.font='500 11px Archivo, system-ui, sans-serif';
+        ctx.fillText(c[2], x(L)-6, yA(150)+k*14);
+        ctx.globalAlpha=revelado;
+      }
+    });
+    ctx.restore();
+  }
+
+  // trayectoria observada
+  ctx.strokeStyle="#cfe8ff"; ctx.lineWidth=2.4; ctx.lineJoin="round";
+  ctx.beginPath();
+  const dMax=Math.min(dia,VIDA);
+  for(let d=0; d<=dMax; d+=2){
+    const p=[x(d),yA(alturaEn(d))];
+    d===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]);
+  }
+  ctx.lineTo(x(dMax),yA(alturaEn(dMax)));
+  ctx.stroke();
+
+  // cabeza
+  const cx=x(dMax), cy=yA(alturaEn(dMax));
+  ctx.fillStyle="#fff";
+  ctx.shadowColor="rgba(207,232,255,.9)"; ctx.shadowBlur=10;
+  ctx.beginPath(); ctx.arc(cx,cy,3.4,0,7); ctx.fill();
+  ctx.shadowBlur=0;
+
+  if(dia>=VIDA){
+    ctx.fillStyle="#ff8a5c"; ctx.textAlign="left";
+    ctx.font='600 11px Archivo, system-ui, sans-serif';
+    ctx.fillText("reentrada",cx+7,cy+2);
+  }
+}
+
+/* ============ panel vivo ============ */
+function actualizarPanel(){
+  const d=Math.min(dia,VIDA);
+  const h=alturaEn(d);
+  elFecha.textContent=fechaDe(d);
+  elAlt.textContent = dia>=VIDA ? "—" : Math.round(h);
+  elTasa.textContent = dia>=VIDA ? "ya cayó" : num(tasaEn(d), tasaEn(d)<1?2:1)+" km";
+  elDias.textContent = Math.round(d);
+  elFlujo.textContent = Math.round(flujoEn(d));
+  elRevs.textContent = Math.round(revsEn(d)).toLocaleString("es-CO");
+
+  const y=yAlt(h);
+  elSat.style.top=y+"%";
+  elEstela.style.height=y+"%";
+  const calor = h<260 ? Math.min(1,(260-h)/120) : 0;
+  elCalor.style.opacity = dia>=VIDA ? 1 : calor;
+  elSat.style.transform="translate(-50%,-50%) rotate("+(h<300?(300-h)*0.12:0)+"deg)";
+  const enCohete = (fase==="lanzamiento" && tLanz<L_SUELTA);
+  elSat.style.opacity = (dia>=VIDA+3 || enCohete) ? 0 : 1;
+  elEstela.style.opacity = enCohete ? 0 : 1;
+}
+
+
+
+/* ============ sonido: pad armónico por tramos y efectos puntuales ============ */
+const Sonido=(function(){
+  let ctx=null, maestro=null, revGain=null, rev=null, filtro=null, voces=[], encendido=false;
+  const ACORDES=[
+    [110.00,164.81,220.00,246.94],   // despegue
+    [ 87.31,130.81,174.61,220.00],   // primer año
+    [146.83,220.00,261.63,349.23],   // el ciclo solar
+    [146.83,207.65,261.63,329.63],   // tormenta
+    [130.81,196.00,246.94,329.63],   // máximo
+    [138.59,207.65,277.18,329.63],   // el calor sostenido
+    [110.00,164.81,196.00,261.63],   // la cámara
+    [103.83,155.56,196.00,261.63],   // aceleración
+    [ 98.00,146.83,185.00,246.94],   // últimos días
+    [ 87.31,130.81,174.61,261.63]    // reentrada
+  ];
+  function impulso(dur,decaimiento){
+    const n=Math.floor(ctx.sampleRate*dur), b=ctx.createBuffer(2,n,ctx.sampleRate);
+    for(let c=0;c<2;c++){
+      const d=b.getChannelData(c);
+      for(let i=0;i<n;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/n,decaimiento);
+    }
+    return b;
+  }
+  function ruido(dur){
+    const n=Math.floor(ctx.sampleRate*dur), b=ctx.createBuffer(1,n,ctx.sampleRate);
+    const d=b.getChannelData(0);
+    for(let i=0;i<n;i++) d[i]=Math.random()*2-1;
+    return b;
+  }
+  function crear(){
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) return false;
+    ctx=new AC();
+    maestro=ctx.createGain(); maestro.gain.value=0.0001; maestro.connect(ctx.destination);
+    rev=ctx.createConvolver(); rev.buffer=impulso(3.0,2.6);
+    revGain=ctx.createGain(); revGain.gain.value=0.42;
+    rev.connect(revGain); revGain.connect(maestro);
+    filtro=ctx.createBiquadFilter(); filtro.type="lowpass"; filtro.frequency.value=760;
+    filtro.Q.value=0.6; filtro.connect(maestro); filtro.connect(rev);
+    const ac=ACORDES[0];
+    for(let i=0;i<4;i++){
+      const o=ctx.createOscillator();
+      o.type=(i===2)?"triangle":"sine";
+      o.frequency.value=ac[i];
+      o.detune.value=(i-1.5)*4;
+      const g=ctx.createGain(); g.gain.value=(i===0?0.16:0.085);
+      const lfo=ctx.createOscillator(); lfo.frequency.value=0.05+0.03*i;
+      const lg=ctx.createGain(); lg.gain.value=0.018;
+      lfo.connect(lg); lg.connect(g.gain); lfo.start();
+      o.connect(g); g.connect(filtro); o.start();
+      voces.push(o);
+    }
+    return true;
+  }
+  function golpe(freq,dur,vol,tipo){
+    if(!ctx) return;
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.type=tipo||"sine"; o.frequency.value=freq;
+    g.gain.setValueAtTime(0.0001,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(vol,ctx.currentTime+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+dur);
+    o.connect(g); g.connect(maestro); g.connect(rev);
+    o.start(); o.stop(ctx.currentTime+dur+0.05);
+  }
+  function soplo(dur,vol,f0,f1,tipoFiltro,q){
+    if(!ctx) return;
+    const src=ctx.createBufferSource(); src.buffer=ruido(dur);
+    const bp=ctx.createBiquadFilter(); bp.type=tipoFiltro||"lowpass";
+    bp.frequency.setValueAtTime(f0,ctx.currentTime);
+    bp.frequency.exponentialRampToValueAtTime(f1,ctx.currentTime+dur);
+    bp.Q.value=q||1;
+    const g=ctx.createGain();
+    g.gain.setValueAtTime(0.0001,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(vol,ctx.currentTime+dur*0.28);
+    g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+dur);
+    src.connect(bp); bp.connect(g); g.connect(maestro); g.connect(rev);
+    src.start(); src.stop(ctx.currentTime+dur);
+  }
+  return {
+    activo(){ return encendido; },
+    alternar(){
+      if(!ctx && !crear()) return false;
+      encendido=!encendido;
+      if(ctx.state==="suspended") ctx.resume();
+      maestro.gain.cancelScheduledValues(ctx.currentTime);
+      maestro.gain.setValueAtTime(Math.max(maestro.gain.value,0.0001),ctx.currentTime);
+      maestro.gain.exponentialRampToValueAtTime(encendido?0.30:0.0001,ctx.currentTime+1.2);
+      return encendido;
+    },
+    escena(i){
+      if(!ctx) return;
+      const ac=ACORDES[Math.max(0,Math.min(ACORDES.length-1,i))];
+      voces.forEach((o,k)=> o.frequency.setTargetAtTime(ac[k],ctx.currentTime,0.9));
+      golpe(ac[3]*2,2.6,0.05,"sine");
+    },
+    cuenta(n){ golpe(n>0?622:0,0.001,0.0001); golpe(660,0.16,0.09,"sine"); },
+    cero(){ golpe(880,0.9,0.12,"sine"); },
+    despegue(){ soplo(5.0,0.16,220,60,"lowpass",1); golpe(55,4.5,0.10,"sine"); },
+    tormenta(){ soplo(3.2,0.06,1200,5200,"bandpass",6); golpe(392,2.4,0.06,"triangle"); },
+    reentrada(){
+      if(!ctx) return;
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.type="sine"; o.frequency.setValueAtTime(320,ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(58,ctx.currentTime+3.4);
+      g.gain.setValueAtTime(0.0001,ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.11,ctx.currentTime+0.5);
+      g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+3.6);
+      o.connect(g); g.connect(maestro); g.connect(rev);
+      o.start(); o.stop(ctx.currentTime+3.7);
+      soplo(3.4,0.12,900,90,"lowpass",1);
+    },
+    final(){
+      if(!ctx) return;
+      [174.61,261.63,349.23,523.25].forEach((f,i)=> setTimeout(()=>golpe(f,3.2,0.055,"sine"), i*420));
+    }
+  };
+})();
+
+/* ============ escena: despegue, Sol, viento solar y auroras ============ */
+const cielo=document.getElementById("cielo"), cx2=cielo.getContext("2d");
+let Wc=0,Hs=0;
+const particulas=[];
+let giro=0, fogonazo=0, pulso=0, actSuave=0.25, tLanz=0;
+
+/* ritmo del despegue, en segundos */
+const L_CUENTA=0.7, L_CERO=4.7, L_SUBE=5.0, L_FIN_SUBE=9.6, L_SEP=9.9, L_SUELTA=10.6, L_LISTO=11.4;
+
+function medirCielo(){
+  const r=cielo.getBoundingClientRect();
+  if(!r.width||!r.height) return;
+  Wc=r.width; Hs=r.height;
+  cielo.width=Math.round(Wc*dpr); cielo.height=Math.round(Hs*dpr);
+  cx2.setTransform(dpr,0,0,dpr,0,0);
+  const G=geometriaTierra();
+  FONDO=Math.max(58,Math.min(92,((G.y-G.r)/Hs)*100+1.5));
+  recolocarMarcas();
+  particulas.length=0;
+}
+function yPix(h){ return yAlt(Math.max(0,Math.min(520,h)))/100*Hs; }
+
+// 0 = Sol tranquilo, 1 = Sol en su punto más agitado
+function actividad(d){ return Math.max(0,Math.min(1,(flujoEn(d)-105)/135)); }
+function tormentaDia(d){
+  let v=0;
+  for(const t of TORMENTAS){
+    const dd=d-t.d;
+    if(dd<-2||dd>8) continue;
+    const f = dd<0 ? Math.exp(-Math.pow(dd/1.2,2)) : Math.exp(-dd/2.6);
+    v=Math.max(v, f*Math.min(1,t.dst/340));
+  }
+  return v;
+}
+function dispararTormenta(){ pulso=1; fogonazo=1; Sonido.tormenta(); }
+
+function geometriaTierra(){
+  const esc=(1.5*Wc)/220;
+  return {x:Wc/2, y:(Hs+2-132*esc)+196*esc, r:164*esc};
+}
+function solPos(){
+  const R=Math.max(21,Math.min(38,Wc*0.205));
+  return {x:Wc*0.52, y:R+10, R:R};
+}
+
+/* el hueco entre el Sol y la Tierra no está a escala: hay que decirlo */
+function dibujarDistancia(T){
+  const S=solPos();
+  const y1=S.y+S.R+(T>0.35?36:24), y2=yPix(520)-8;
+  if(y2-y1<34) return;
+  const x=Math.max(14,Wc*0.5-46), ym=(y1+y2)/2;
+  cx2.strokeStyle="rgba(143,162,194,.6)"; cx2.lineWidth=1;
+  cx2.setLineDash([3,3]);
+  cx2.beginPath(); cx2.moveTo(x,y1+4); cx2.lineTo(x,ym-6);
+  cx2.moveTo(x,ym+6); cx2.lineTo(x,y2-4); cx2.stroke();
+  cx2.setLineDash([]);
+  // puntas de flecha
+  cx2.beginPath(); cx2.moveTo(x,y1); cx2.lineTo(x-3.5,y1+6); cx2.lineTo(x+3.5,y1+6);
+  cx2.closePath(); cx2.fillStyle="rgba(143,162,194,.75)"; cx2.fill();
+  cx2.beginPath(); cx2.moveTo(x,y2); cx2.lineTo(x-3.5,y2-6); cx2.lineTo(x+3.5,y2-6);
+  cx2.closePath(); cx2.fill();
+  // marca de corte: el dibujo salta una distancia enorme
+  cx2.strokeStyle="rgba(143,162,194,.75)";
+  cx2.beginPath();
+  cx2.moveTo(x-5,ym+4); cx2.lineTo(x+5,ym-1);
+  cx2.moveTo(x-5,ym+1); cx2.lineTo(x+5,ym-4);
+  cx2.stroke();
+  cx2.textAlign="left";
+  cx2.font='600 9.5px Archivo, system-ui, sans-serif';
+  cx2.fillStyle="rgba(176,192,218,.95)";
+  cx2.fillText("150 millones", x+7, ym-3);
+  cx2.fillText("de km", x+7, ym+8);
+  if(y2-y1>62){
+    cx2.font='400 9px Archivo, system-ui, sans-serif';
+    cx2.fillStyle="rgba(120,138,170,.9)";
+    cx2.fillText("no está a escala", x+7, ym+20);
+  }
+}
+
+function nuevaParticula(T,act){
+  const S=solPos(), G=geometriaTierra();
+  const a0=Math.atan2(G.y-S.y,G.x-S.x);
+  const ang=a0+(Math.random()-0.5)*1.45;
+  const v=(20+Math.random()*34)*(0.55+act*1.5)*(1+T*1.9);
+  return {x:S.x+Math.cos(ang)*S.R*1.02, y:S.y+Math.sin(ang)*S.R*1.02,
+          vx:Math.cos(ang)*v, vy:Math.sin(ang)*v, t:T>0.3, vida:1};
+}
+
+/* ---------- el Sol ---------- */
+function dibujarSol(T){
+  const S=solPos(), act=actSuave;
+  const rCor=S.R*(1.55+act*0.55+fogonazo*0.75);
+  const corona=cx2.createRadialGradient(S.x,S.y,S.R*0.85,S.x,S.y,rCor);
+  corona.addColorStop(0,"rgba(255,196,84,"+(0.42+act*0.34)+")");
+  corona.addColorStop(.45,"rgba(255,138,48,"+(0.16+act*0.20)+")");
+  corona.addColorStop(1,"rgba(255,120,40,0)");
+  cx2.fillStyle=corona; cx2.beginPath(); cx2.arc(S.x,S.y,rCor,0,7); cx2.fill();
+
+  // penachos de la corona
+  for(let i=0;i<16;i++){
+    const a=i*Math.PI/8;
+    const largo=S.R*(1.10+act*0.55)+Math.sin(i*1.3)*S.R*0.08+fogonazo*S.R*0.7;
+    cx2.strokeStyle="rgba(255,196,96,"+(0.14+act*0.30)+")";
+    cx2.lineWidth=1.4;
+    cx2.beginPath();
+    cx2.moveTo(S.x+Math.cos(a)*S.R*1.01,S.y+Math.sin(a)*S.R*1.01);
+    cx2.lineTo(S.x+Math.cos(a)*largo,S.y+Math.sin(a)*largo);
+    cx2.stroke();
+  }
+  // disco con oscurecimiento hacia el borde
+  const disco=cx2.createRadialGradient(S.x-S.R*0.22,S.y-S.R*0.26,S.R*0.1,S.x,S.y,S.R);
+  disco.addColorStop(0,"#fff8e2"); disco.addColorStop(.45,"#ffcc55");
+  disco.addColorStop(.82,"#f59a22"); disco.addColorStop(1,"#d96a12");
+  cx2.fillStyle=disco; cx2.beginPath(); cx2.arc(S.x,S.y,S.R,0,7); cx2.fill();
+
+  cx2.save();
+  cx2.beginPath(); cx2.arc(S.x,S.y,S.R,0,7); cx2.clip();
+  // granulación
+  cx2.fillStyle="rgba(255,232,170,.22)";
+  for(let i=0;i<9;i++){
+    const a=i*2.3, rr=S.R*(0.15+0.09*(i%5));
+    cx2.beginPath();
+    cx2.ellipse(S.x+Math.cos(a)*rr,S.y+Math.sin(a)*rr,S.R*0.16,S.R*0.11,a,0,7);
+    cx2.fill();
+  }
+  // manchas solares: aparecen más cuando el Sol está activo, pero pequeñas
+  const manchas=Math.round(act*8);
+  for(let i=0;i<manchas;i++){
+    const a=0.4+i*1.87, rr=S.R*(0.16+0.09*(i%4));
+    const px=S.x+Math.cos(a)*rr, py=S.y+Math.sin(a)*rr*0.72;
+    const tam=S.R*(0.020+0.008*(i%3));
+    cx2.fillStyle="rgba(196,120,40,.45)";
+    cx2.beginPath(); cx2.ellipse(px,py,tam*1.8,tam*1.3,a,0,7); cx2.fill();
+    cx2.fillStyle="rgba(96,38,6,"+(0.5+act*0.3)+")";
+    cx2.beginPath(); cx2.ellipse(px,py,tam,tam*0.72,a,0,7); cx2.fill();
+  }
+  cx2.restore();
+
+  // arcos de plasma en el borde: crecen con la actividad
+  const arcos=1+Math.round(act*3)+(fogonazo>0.1?2:0);
+  for(let i=0;i<arcos;i++){
+    const a=0.7+i*1.6;
+    const bx=S.x+Math.cos(a)*S.R, by=S.y+Math.sin(a)*S.R;
+    const h=S.R*(0.16+act*0.3+fogonazo*0.45);
+    cx2.strokeStyle="rgba(255,150,70,"+(0.35+act*0.4)+")";
+    cx2.lineWidth=2.1;
+    cx2.beginPath();
+    cx2.arc(bx+Math.cos(a)*h*0.5,by+Math.sin(a)*h*0.5,h,a-2.2,a+2.2);
+    cx2.stroke();
+  }
+  if(fogonazo>0.03){
+    cx2.strokeStyle="rgba(255,245,215,"+(0.75*fogonazo)+")"; cx2.lineWidth=2.4;
+    cx2.beginPath(); cx2.arc(S.x,S.y,S.R*(1.05+(1-fogonazo)*1.9),0,7); cx2.stroke();
+  }
+
+  cx2.textAlign="center";
+  cx2.font='600 11px Archivo, system-ui, sans-serif';
+  cx2.fillStyle="rgba(245,197,66,.95)";
+  cx2.fillText("el Sol", S.x, S.y+S.R+14);
+  if(T>0.35){
+    cx2.font='600 10px Archivo, system-ui, sans-serif';
+    cx2.fillStyle="rgba(255,196,84,"+Math.min(1,T*1.6)+")";
+    cx2.fillText("¡tormenta solar!", S.x, S.y+S.R+26);
+  }
+}
+
+/* ---------- el cohete Transporter-7 ---------- */
+function dibujarCohete(tt){
+  const G=geometriaTierra();
+  const ySuelo=G.y-G.r+3, yOrbita=yPix(500);
+  const esc=Math.max(0.9,Wc/165);
+  const x0=Wc*0.5;
+
+  // cuenta regresiva
+  if(tt<L_CERO+0.9){
+    cx2.textAlign="center";
+    cx2.font='500 11px Archivo, system-ui, sans-serif';
+    cx2.fillStyle="rgba(143,162,194,"+Math.min(1,tt/0.5)+")";
+    cx2.fillText("15 de abril de 2023", x0, Hs*0.40);
+    cx2.fillText("vuelo Transporter-7", x0, Hs*0.40+14);
+    if(tt<L_CERO){
+      const restan=L_CERO-tt;
+      const n=Math.max(1,Math.ceil(restan/0.4));
+      const f=1-((restan%0.4)/0.4);
+      cx2.font='700 '+Math.round(46*esc*0.9)+'px Archivo, system-ui, sans-serif';
+      cx2.fillStyle="rgba(255,255,255,"+(0.35+0.65*(1-f))+")";
+      cx2.fillText("T-"+n, x0, Hs*0.40+52+f*4);
+    } else {
+      const a=1-(tt-L_CERO)/0.9;
+      cx2.font='700 '+Math.round(21*esc)+'px Archivo, system-ui, sans-serif';
+      cx2.fillStyle="rgba(255,196,84,"+a+")";
+      cx2.fillText("¡Despegue!", x0, Hs*0.40+48);
+    }
+  }
+  if(tt<L_CERO-0.15) return;   // todavía en la plataforma, sin humo
+
+  const e=Math.max(0,Math.min(1,(tt-L_SUBE)/(L_FIN_SUBE-L_SUBE)));
+  const y=ySuelo+(yOrbita-ySuelo)*(e*e*(3-2*e));
+  const x=x0 - e*e*Wc*0.10;
+  const sep=tt>L_SEP, suelto=tt>L_SUELTA;
+
+  if(tt<L_SEP){
+    for(let i=0;i<16;i++){
+      const f=i/16, yy=y+16*esc+f*52*esc*(0.35+e), a=(1-f)*0.42;
+      cx2.fillStyle="rgba(255,"+Math.round(146+80*(1-f))+",92,"+a*0.55+")";
+      cx2.beginPath();
+      cx2.ellipse(x+Math.sin(f*7+tt*6)*3.2*esc, yy, (2.6+f*7.5)*esc*0.72, (3+f*6)*esc*0.6, 0,0,7);
+      cx2.fill();
+    }
+    const parp=0.75+Math.random()*0.35;
+    const fl=cx2.createLinearGradient(x,y+8*esc,x,y+(22+11*parp)*esc);
+    fl.addColorStop(0,"rgba(255,255,225,.95)");
+    fl.addColorStop(.45,"rgba(255,182,64,.85)");
+    fl.addColorStop(1,"rgba(255,92,30,0)");
+    cx2.fillStyle=fl;
+    cx2.beginPath(); cx2.moveTo(x-3.6*esc,y+8*esc); cx2.lineTo(x+3.6*esc,y+8*esc);
+    cx2.lineTo(x,y+(23+12*parp)*esc); cx2.closePath(); cx2.fill();
+  }
+  if(!suelto){
+    cx2.fillStyle="#edf2fa";
+    cx2.beginPath();
+    cx2.moveTo(x,y-16*esc);
+    cx2.quadraticCurveTo(x+3.8*esc,y-10*esc,x+3.8*esc,y-4.5*esc);
+    cx2.lineTo(x+3.8*esc,y+8*esc); cx2.lineTo(x-3.8*esc,y+8*esc);
+    cx2.lineTo(x-3.8*esc,y-4.5*esc);
+    cx2.quadraticCurveTo(x-3.8*esc,y-10*esc,x,y-16*esc);
+    cx2.closePath(); cx2.fill();
+    cx2.fillStyle="#0e1729"; cx2.fillRect(x-3.8*esc,y+1.4*esc,7.6*esc,2.8*esc);
+    cx2.fillStyle="#94a9c9";
+    cx2.beginPath(); cx2.moveTo(x-3.8*esc,y+8*esc); cx2.lineTo(x-6.8*esc,y+13.5*esc);
+    cx2.lineTo(x-3.8*esc,y+13.5*esc); cx2.closePath(); cx2.fill();
+    cx2.beginPath(); cx2.moveTo(x+3.8*esc,y+8*esc); cx2.lineTo(x+6.8*esc,y+13.5*esc);
+    cx2.lineTo(x+3.8*esc,y+13.5*esc); cx2.closePath(); cx2.fill();
+    if(sep){
+      const a=Math.max(0,1-(tt-L_SEP)/0.7);
+      cx2.strokeStyle="rgba(255,240,200,"+a+")"; cx2.lineWidth=2;
+      cx2.beginPath(); cx2.arc(x,y-2*esc,11*esc+(1-a)*30*esc,0,7); cx2.stroke();
+    }
+    cx2.textAlign="left";
+    cx2.font='600 10px Archivo, system-ui, sans-serif';
+    cx2.fillStyle="rgba(207,232,255,.92)";
+    cx2.fillText("Transporter-7", x+10*esc, y);
+    cx2.font='400 9.5px Archivo, system-ui, sans-serif';
+    cx2.fillStyle="rgba(143,162,194,.9)";
+    cx2.fillText(sep?"suelta el satélite":"subiendo", x+10*esc, y+12);
+  }
+  if(sep){
+    cx2.textAlign="center";
+    cx2.font='600 10px Archivo, system-ui, sans-serif';
+    cx2.fillStyle="rgba(207,232,255,"+Math.min(1,(tt-L_SEP)*2)+")";
+    cx2.fillText("lo deja a 500 km", Wc*0.5, yOrbita-16);
+  }
+}
+
+/* ---------- todo junto ---------- */
+function dibujarCielo(dt){
+  if(!Wc||!Hs){ medirCielo(); if(!Wc||!Hs) return; }
+  cx2.clearRect(0,0,Wc,Hs);
+  const d=Math.min(dia,VIDA);
+  const act=actividad(d);
+  actSuave+=(act-actSuave)*Math.min(1,dt*2.2);
+  pulso=Math.max(0,pulso-dt*0.30);
+  fogonazo=Math.max(0,fogonazo-dt*0.55);
+  const T=Math.max(tormentaDia(d),pulso);
+  const G=geometriaTierra();
+  if(!reduce) giro+=dt*(0.30+actSuave*0.6);
+
+  /* la atmósfera se infla cuando el Sol calienta */
+  const inflado=16+actSuave*42+T*32;
+  const halo=cx2.createRadialGradient(G.x,G.y,G.r,G.x,G.y,G.r+inflado);
+  halo.addColorStop(0,"rgba(143,212,255,"+(0.20+actSuave*0.24)+")");
+  halo.addColorStop(.6,"rgba(143,212,255,"+(0.08+actSuave*0.10)+")");
+  halo.addColorStop(1,"rgba(143,212,255,0)");
+  cx2.fillStyle=halo;
+  cx2.beginPath(); cx2.arc(G.x,G.y,G.r+inflado,Math.PI*0.9,Math.PI*2.1); cx2.fill();
+
+  /* auroras: con el Sol agitado, y mucho más en las tormentas */
+  const aur=Math.min(1,T*1.4+Math.max(0,actSuave-0.30)*0.75);
+  if(aur>0.05){
+    const abre=Math.asin(Math.min(0.92,(Wc*0.40)/G.r));
+    for(const lado of [-1,1]){
+      const a=-Math.PI/2+lado*abre;
+      const ax=G.x+Math.cos(a)*(G.r+6), ay=G.y+Math.sin(a)*(G.r+6);
+      const rad=Math.max(22,Wc*0.36)*(0.7+aur*0.65);
+      const g=cx2.createRadialGradient(ax,ay,0,ax,ay,rad);
+      g.addColorStop(0,"rgba(160,255,210,"+(0.66*aur)+")");
+      g.addColorStop(.38,"rgba(87,224,160,"+(0.30*aur)+")");
+      g.addColorStop(.72,"rgba(224,81,138,"+(0.14*aur)+")");
+      g.addColorStop(1,"rgba(224,81,138,0)");
+      cx2.fillStyle=g; cx2.beginPath(); cx2.arc(ax,ay,rad,0,7); cx2.fill();
+      for(let k=0;k<7;k++){
+        const aa=a+(k-3)*0.034*lado;
+        const alto=(10+aur*30)*(0.6+0.4*Math.sin(giro*3+k));
+        cx2.strokeStyle="rgba(170,255,215,"+(0.34*aur*(1-Math.abs(k-3)/4))+")";
+        cx2.lineWidth=1.4;
+        cx2.beginPath();
+        cx2.moveTo(G.x+Math.cos(aa)*(G.r+2), G.y+Math.sin(aa)*(G.r+2));
+        cx2.lineTo(G.x+Math.cos(aa)*(G.r+alto), G.y+Math.sin(aa)*(G.r+alto));
+        cx2.stroke();
+      }
+    }
+    cx2.strokeStyle="rgba(130,255,195,"+(0.55*aur)+")";
+    cx2.lineWidth=1.6+aur*2.6;
+    cx2.beginPath(); cx2.arc(G.x,G.y,G.r+3,Math.PI*1.18,Math.PI*1.82); cx2.stroke();
+    if(aur>0.40){
+      cx2.font='600 10.5px Archivo, system-ui, sans-serif';
+      cx2.textAlign="center"; cx2.fillStyle="rgba(160,255,210,"+Math.min(1,aur*1.5)+")";
+      cx2.fillText("auroras", G.x, G.y-G.r-inflado-9);
+    }
+  }
+
+  /* viento solar: más partículas y más rápidas cuanto más activo el Sol */
+  const objetivo=reduce?10:Math.round(14+actSuave*48+T*90);
+  while(particulas.length<objetivo) particulas.push(nuevaParticula(T,actSuave));
+  for(let i=particulas.length-1;i>=0;i--){
+    const q=particulas[i];
+    if(!reduce){ q.x+=q.vx*dt; q.y+=q.vy*dt; }
+    const dx=q.x-G.x, dy=q.y-G.y;
+    if(Math.sqrt(dx*dx+dy*dy)<G.r+inflado*0.6) q.vida-=dt*2.6;
+    if(q.vida<=0||q.y>Hs+20||q.x<-40||q.x>Wc+40||particulas.length>objetivo+12){
+      particulas.splice(i,1); continue;
+    }
+    const col=q.t?"140,255,200":"198,230,255";
+    cx2.strokeStyle="rgba("+col+","+(0.55*q.vida)+")";
+    cx2.lineWidth=q.t?1.7:1;
+    cx2.beginPath(); cx2.moveTo(q.x,q.y);
+    cx2.lineTo(q.x-q.vx*0.05,q.y-q.vy*0.05); cx2.stroke();
+  }
+  if(fase==="lanzamiento") dibujarCohete(tLanz);
+  dibujarSol(T);
+  dibujarDistancia(T);
+}
+
+/* ============ bucle ============ */
+function ritmo(h){ return h>420?26: h>340?15: h>270?8: 3.6; }
+
+function paso(ahora){
+  const dt=Math.min((ahora-ultimo)/1000,0.06); ultimo=ahora;
+
+  if(jugando){
+    if(fase==="lanzamiento"){
+      const antes=tLanz;
+      tLanz+=dt;
+      if(tLanz>L_CUENTA && tLanz<L_CERO){
+        const n=Math.max(1,Math.ceil((L_CERO-tLanz)/0.4));
+        if(n!==ultimaCuenta){ ultimaCuenta=n; Sonido.cuenta(n); }
+      }
+      if(antes<L_CERO && tLanz>=L_CERO){ Sonido.cero(); Sonido.despegue(); }
+      if(tLanz>=L_LISTO){ fase="vuelo"; espera=ESPERA_MS; }
+    } else if(espera>0){
+      espera-=dt*1000;
+      if(iEscena>=0){
+        const barra=ESCENAS[iEscena].nodo.querySelector(".progreso-hito");
+        barra.style.width=(100*(1-espera/ESPERA_MS))+"%";
+      }
+      if(espera<=0 && iEscena>=0) ESCENAS[iEscena].nodo.querySelector(".progreso-hito").style.width="0";
+    } else if(fase==="vuelo"){
+      const prev=dia;
+      dia+=ritmo(alturaEn(dia))*dt;
+      for(const t of TORMENTAS){ if(t.d>=prev && t.d<=dia) dispararTormenta(); }
+      // ¿cruzamos algún hito?
+      for(let i=0;i<ESCENAS.length;i++){
+        if(!vistas.has(i) && ESCENAS[i].d>=prev && ESCENAS[i].d<=dia){
+          dia=ESCENAS[i].d; mostrarEscena(i,true); espera=ESPERA_MS; break;
+        }
+      }
+      if(dia>=VIDA){ dia=VIDA; mostrarEscena(ESCENAS.length-1,true); fase="revelar"; espera=ESPERA_MS*1.2; Sonido.reentrada(); }
+    } else if(fase==="revelar"){
+      revelado=Math.min(1,revelado+dt*0.55);
+      xFin = XFIN_A + (XFIN_B-XFIN_A)*Math.min(1,revelado*1.15);
+      if(revelado>=1){ fase="fin"; mostrarBalance(); actualizarBoton(); jugando=false; Sonido.final(); }
+    }
+  }
+
+  try{ actualizarPanel(); }catch(err){ console.error("panel",err); }
+  try{ dibujar(); }catch(err){ console.error("gráfica",err); }
+  try{ dibujarCielo(dt); }catch(err){ console.error("escena",err); }
+  requestAnimationFrame(paso);
+}
+const ESPERA_MS=6200;
+
+/* ============ controles ============ */
+function actualizarBoton(){
+  elPlay.textContent = fase==="fin" ? "Ver otra vez" : (jugando?"Pausar":"Reproducir");
+  elPlay.setAttribute("aria-label", elPlay.textContent+" la secuencia");
+}
+function alternar(){
+  if(fase==="fin"){ reiniciar(); return; }
+  jugando=!jugando; ultimo=performance.now(); actualizarBoton();
+}
+function saltarA(i){
+  if(i===0){ reiniciar(); return; }
+  fase="vuelo"; revelado=0; xFin=XFIN_A; ocultarBalance();
+  dia=ESCENAS[i].d;
+  for(let j=0;j<=i;j++) vistas.add(j);
+  for(let j=i+1;j<ESCENAS.length;j++) vistas.delete(j);
+  iEscena=-1; mostrarEscena(i,true);
+  espera=ESPERA_MS; jugando=true; ultimo=performance.now(); actualizarBoton();
+  ESCENAS.forEach(e=> e.nodo.querySelector(".progreso-hito").style.width="0");
+}
+function reiniciar(){
+  dia=0; revelado=0; xFin=XFIN_A; fase="lanzamiento"; tLanz=0; espera=0; ultimaCuenta=null;
+  vistas=new Set([0]); iEscena=-1; ocultarBalance(); mostrarEscena(0,true);
+  jugando=true; ultimo=performance.now(); actualizarBoton();
+  ESCENAS.forEach(e=> e.nodo.querySelector(".progreso-hito").style.width="0");
+}
+elPlay.addEventListener("click",alternar);
+$("#reiniciar").addEventListener("click",reiniciar);
+$("#sonido").addEventListener("click",function(){
+  const on=Sonido.alternar();
+  this.textContent = on ? "Silenciar" : "Sonido";
+  this.setAttribute("aria-pressed", on ? "true" : "false");
+  if(on && iEscena>=0) Sonido.escena(iEscena);
+});
+document.addEventListener("keydown",ev=>{
+  if(ev.target.tagName==="BUTTON" && ev.code==="Space") return;
+  if(ev.code==="Space"){ ev.preventDefault(); alternar(); }
+  if(ev.code==="ArrowRight"){ ev.preventDefault(); saltarA(Math.min(ESCENAS.length-1,Math.max(0,iEscena)+1)); }
+  if(ev.code==="ArrowLeft"){ ev.preventDefault(); saltarA(Math.max(0,iEscena-1)); }
+});
+
+/* ============ arranque ============ */
+medir();
+medirCielo();
+mostrarEscena(0,false);
+vistas.add(0);
+espera=ESPERA_MS;
+actualizarBoton();
+actualizarPanel();
+requestAnimationFrame(paso);
+})();
+</script>
+</body>
+</html>
