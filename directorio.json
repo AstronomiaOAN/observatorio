@@ -1,0 +1,82 @@
+[
+  {
+    "cargo_es": "Dirección Departamento",
+    "cargo_en": "Department Director",
+    "nombre": "Mario Armando Higuera Garzón",
+    "correo": "mahiguerag@unal.edu.co",
+    "extension": "11021",
+    "oficina": "413-103"
+  },
+  {
+    "cargo_es": "Dirección Área Curricular",
+    "cargo_en": "Curricular Area Director",
+    "nombre": "Eduard Alexis Larrañaga Rubio",
+    "correo": "ealarranaga@unal.edu.co",
+    "extension": "11020",
+    "oficina": "413-104"
+  },
+  {
+    "cargo_es": "Secretaría Departamento",
+    "cargo_en": "Department Secretariat",
+    "nombre": "Islena Bonilla",
+    "correo": "obsan_fcbog@unal.edu.co",
+    "extension": "11020",
+    "oficina": "413-114"
+  },
+  {
+    "cargo_es": "Secretaría Posgrado",
+    "cargo_en": "Graduate Secretariat",
+    "nombre": "Islena Bonilla",
+    "correo": "obsan_fcbog@unal.edu.co",
+    "extension": "11020",
+    "oficina": "413-114"
+  },
+  {
+    "cargo_es": "Sede Histórica",
+    "cargo_en": "Historic Observatory",
+    "nombre": "Gonzalo Jimenez Vargas",
+    "correo": "gjimenezv@unal.edu.co",
+    "extension": "",
+    "oficina": ""
+  },
+  {
+    "cargo_es": "Coordinación de Investigación",
+    "cargo_en": "Research Coordination",
+    "nombre": "Santiago Vargas Domínguez",
+    "correo": "svargasd@unal.edu.co",
+    "extension": "11022",
+    "oficina": "413-106"
+  },
+  {
+    "cargo_es": "Coordinación de Extensión",
+    "cargo_en": "Outreach Coordination",
+    "nombre": "Santiago Vargas Domínguez",
+    "correo": "svargasd@unal.edu.co",
+    "extension": "11022",
+    "oficina": "413-106"
+  },
+  {
+    "cargo_es": "Acreditación",
+    "cargo_en": "Accreditation",
+    "nombre": "Eduard Alexis Larrañaga Rubio",
+    "correo": "ealarranaga@unal.edu.co",
+    "extension": "11020",
+    "oficina": "413-104"
+  },
+  {
+    "cargo_es": "Coordinación de Laboratorios",
+    "cargo_en": "Laboratory Coordination",
+    "nombre": "Santiago Vargas Domínguez",
+    "correo": "svargasd@unal.edu.co",
+    "extension": "11022",
+    "oficina": "413-106"
+  },
+  {
+    "cargo_es": "Comité de Ética",
+    "cargo_en": "Ethics Committee",
+    "nombre": "Santiago Vargas Domínguez",
+    "correo": "svargasd@unal.edu.co",
+    "extension": "11022",
+    "oficina": "413-106"
+  }
+]
