@@ -84,3 +84,7 @@ runpy.run_path(str(S/'final_visual_updates.py'))
 runpy.run_path(str(S/'fix_video_referrer.py'))
 
 runpy.run_path(str(S/'refresh_visuals.py'))
+
+runpy.run_path(str(S/"build_alumni.py"))
+
+runpy.run_path(str(S/"build_research_update.py"))

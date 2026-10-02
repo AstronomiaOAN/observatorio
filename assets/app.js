@@ -34,7 +34,7 @@ document.querySelectorAll('iframe[data-youtube-src]').forEach(frame=>{
   const box=document.createElement('div');box.className='video-local-message';
   const message=document.createElement('p');
   message.textContent=isEnglish?'To play this tour within the page, open the online version. YouTube cannot identify a page opened directly from a local file.':'Para reproducir el recorrido dentro de la página, abre la versión web. YouTube no puede identificar una página abierta directamente desde un archivo local.';
-  const online=document.createElement('a');online.className='button';online.href='https://observatorio-nacional-colombia.savory-brush-1142.chatgpt.site/'+(isEnglish?'en/':'')+'patrimonio.html';online.target='_blank';online.rel='noopener';online.textContent=isEnglish?'Open online tour ↗':'Abrir recorrido en la web ↗';
+  const online=document.createElement('a');online.className='button';online.href='https://observatorio-nacional-colombia.astrosanti.chatgpt.site/'+(isEnglish?'en/':'')+'patrimonio.html';online.target='_blank';online.rel='noopener';online.textContent=isEnglish?'Open online tour ↗':'Abrir recorrido en la web ↗';
   const direct=document.createElement('a');direct.href='https://www.youtube.com/watch?v=9gAK0wLzbLM';direct.target='_blank';direct.rel='noopener';direct.textContent=isEnglish?'Watch on YouTube ↗':'Ver en YouTube ↗';
   box.append(message,online,direct);frame.replaceWith(box);
  }

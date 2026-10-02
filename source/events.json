@@ -1,0 +1,212 @@
+[
+  {
+    "id": "larim2026",
+    "title": "LARIM 2026 · XVIII Latin American Regional IAU Meeting",
+    "date": "2026-11-30 / 2026-12-04",
+    "place": "Cancún, México",
+    "role": [
+      "Encuentro regional relacionado",
+      "Related regional meeting"
+    ],
+    "description_es": "Encuentro organizado por IA-UNAM, IRyA-UNAM e INAOE. El taller 4WAI, con participación del OAN en su comité científico, forma parte de las actividades satélite.",
+    "description_en": "Organized by IA-UNAM, IRyA-UNAM and INAOE. The satellite workshop 4WAI includes OAN participation on its scientific committee.",
+    "url": "https://sites.google.com/astro.unam.mx/larim2026/",
+    "image": null,
+    "status": "upcoming"
+  },
+  {
+    "id": "wai2026",
+    "title": "4WAI · Astronomy Beyond the Common Senses",
+    "date": "2026-11-30 / 2026-12-01",
+    "place": "Cancún, México",
+    "role": [
+      "Comité científico · Santiago Vargas",
+      "Scientific committee · Santiago Vargas"
+    ],
+    "description_es": "Cuarta edición del taller sobre accesibilidad e inclusión en astronomía: experiencias educativas, tecnologías de apoyo y participación de comunidades diversas.",
+    "description_en": "The fourth workshop on accessibility and inclusion in astronomy brings together inclusive education, assistive technologies and diverse communities.",
+    "url": "https://astronomiaoan.co/4wai/",
+    "image": null,
+    "status": "upcoming"
+  },
+  {
+    "id": "cocoa2026",
+    "title": "IX Congreso Colombiano de Astronomía y Astrofísica · CoCoA 2026",
+    "date": "2026-09-01 / 2026-09-04",
+    "place": "Bogotá, Colombia",
+    "role": [
+      "Coorganización y sede · OAN / UNAL",
+      "Co-organizer and venue · OAN / UNAL"
+    ],
+    "description_es": "Encuentro de AstroCo, UNAL, Universidad Distrital y Uniandes. El OAN recibió las jornadas del 2 y 4 de septiembre; docentes e integrantes de su comunidad participaron en los comités.",
+    "description_en": "A meeting of AstroCo, UNAL, Universidad Distrital and Uniandes. OAN hosted September 2 and 4, with members of its community on the organizing committees.",
+    "url": "https://accefyn.com/microsites/nodos/astroco/cocoa-2026/",
+    "image": "cocoa-2026.png",
+    "status": "past"
+  },
+  {
+    "id": "colombia2025",
+    "title": "VI Colombia Espacial",
+    "date": "2025",
+    "place": "Bogotá, Colombia",
+    "role": [
+      "Organización y colaboración institucional",
+      "Organization and institutional collaboration"
+    ],
+    "description_es": "Encuentro sobre ciencia y tecnología espacial. Sus contribuciones cuentan con difusión en eSPECTRA y transmisiones en el canal del Observatorio.",
+    "description_en": "A meeting on space science and technology, with contributions featured in eSPECTRA and broadcasts on the Observatory’s channel.",
+    "url": "https://www.youtube.com/watch?v=vdeuxgdUoCM",
+    "image": null,
+    "status": "past"
+  },
+  {
+    "id": "iaus400",
+    "title": "IAU Symposium 400 · Solar and Stellar Multi-Scale Activity",
+    "date": "2025-07-21 / 2025-07-25",
+    "place": "Medellín, Colombia",
+    "role": [
+      "Organización científica y local · OAN",
+      "Scientific and local organization · OAN"
+    ],
+    "description_es": "Actividad solar y estelar a múltiples escalas. Santiago Vargas presidió el comité científico y Benjamín Calvo el comité local. Sede: Universidad EAFIT.",
+    "description_en": "Solar and stellar activity across scales. Santiago Vargas chaired the scientific committee and Benjamín Calvo chaired the local committee. Venue: Universidad EAFIT.",
+    "url": "https://astronomiaoan.github.io/iaus400/index-es.html",
+    "image": "iaus400-poster.jpg",
+    "status": "past"
+  },
+  {
+    "id": "colombia2024",
+    "title": "V Colombia Espacial",
+    "date": "2024",
+    "place": "Bogotá, Colombia",
+    "role": [
+      "Coorganización · OAN y aliados",
+      "Co-organization · OAN and partners"
+    ],
+    "description_es": "Edición vinculada al primer Foro de Cooperación Académica de Profesores China–América Latina sobre Ciencia Espacial.",
+    "description_en": "An edition connected with the first China–Latin America academic cooperation forum on space science.",
+    "url": "https://www.instagram.com/p/DCNReOUo4Ee/",
+    "image": null,
+    "status": "past"
+  },
+  {
+    "id": "colombia2023",
+    "title": "Colombia Espacial 2023",
+    "date": "2023-12-13 / 2023-12-14",
+    "place": "Colombia",
+    "role": [
+      "Organización · OAN y aliados",
+      "Organization · OAN and partners"
+    ],
+    "description_es": "Logros tecnológicos nacionales y foros sobre proyectos aeroespaciales, con academia, industria y gobierno.",
+    "description_en": "National technological achievements and aerospace project discussions involving academia, industry and government.",
+    "url": "https://accefyn.com/microsites/nodos/astroco/colombia-espacial-2023/",
+    "image": null,
+    "status": "past"
+  },
+  {
+    "id": "colombia2022",
+    "title": "Colombia Espacial 2022 · CITE22",
+    "date": "2022",
+    "place": "Colombia",
+    "role": [
+      "Organización y alianzas académicas",
+      "Organization and academic partnerships"
+    ],
+    "description_es": "Encuentro conjunto con el tercer Taller de Ciencia y Tecnología Espacial para conectar iniciativas científicas, técnicas y empresariales.",
+    "description_en": "A joint meeting with the third Space Science and Technology Workshop connecting scientific, technical and business initiatives.",
+    "url": "https://accefyn.com/microsites/nodos/astroco/colombia-espacial-2022/",
+    "image": null,
+    "status": "past"
+  },
+  {
+    "id": "colombia2021",
+    "title": "Colombia Espacial 2021",
+    "date": "2021",
+    "place": "Virtual",
+    "role": [
+      "Organización · OAN",
+      "Organization · OAN"
+    ],
+    "description_es": "Conferencias y conversaciones sobre el desarrollo espacial colombiano, conservadas en el canal institucional.",
+    "description_en": "Talks and discussions on Colombian space development, preserved on the institutional channel.",
+    "url": "https://www.youtube.com/watch?v=bDY35vTeH8g",
+    "image": null,
+    "status": "past"
+  },
+  {
+    "id": "colombia2020",
+    "title": "Maratón Colombia Espacial",
+    "date": "2020",
+    "place": "Virtual",
+    "role": [
+      "Organización · OAN y aliados",
+      "Organization · OAN and partners"
+    ],
+    "description_es": "Primera edición del ciclo, orientada a conectar la diáspora científica y las capacidades espaciales del país.",
+    "description_en": "The first edition of the series connected the scientific diaspora with the country’s space capabilities.",
+    "url": "https://minciencias.gov.co/sites/default/files/ckeditor_files/Maraton_Info%20%281%29%20doc.pdf",
+    "image": null,
+    "status": "past"
+  },
+  {
+    "id": "isya2018",
+    "title": "41st International School for Young Astronomers · ISYA",
+    "date": "2018-07-08 / 2018-07-28",
+    "place": "Socorro, Santander, Colombia",
+    "role": [
+      "Comité organizador · Santiago Vargas y Mario Higuera",
+      "Organizing committee · Santiago Vargas and Mario Higuera"
+    ],
+    "description_es": "Escuela de la IAU acogida por una alianza de universidades colombianas y la Oficina Andina de Astronomía para el Desarrollo, en la sede UIS Socorro.",
+    "description_en": "An IAU school hosted at UIS Socorro by a Colombian university partnership and the Andean Office of Astronomy for Development.",
+    "url": "https://iauarchive.eso.org/static/education/school_for_young_astronomers/list/report-of-2018-colombia-isya.pdf",
+    "image": null,
+    "status": "past"
+  },
+  {
+    "id": "iaus327",
+    "title": "IAU Symposium 327 · Fine Structure and Dynamics of the Solar Atmosphere",
+    "date": "2016-10-09 / 2016-10-14",
+    "place": "Cartagena de Indias, Colombia",
+    "role": [
+      "Encuentro internacional impulsado por el OAN",
+      "International meeting supported by OAN"
+    ],
+    "description_es": "Simposio sobre la estructura fina y la dinámica de la atmósfera solar, celebrado en Cartagena y documentado en las memorias de la IAU.",
+    "description_en": "A symposium on fine structure and dynamics in the solar atmosphere, held in Cartagena and documented in the IAU proceedings.",
+    "url": "https://spd.aas.org/solarnews/2016/3/",
+    "image": null,
+    "status": "past"
+  },
+  {
+    "id": "larim2016",
+    "title": "LARIM 2016 · XV Latin American Regional IAU Meeting",
+    "date": "2016-10-03 / 2016-10-07",
+    "place": "Cartagena de Indias, Colombia",
+    "role": [
+      "Organización colombiana con participación del OAN",
+      "Colombian organization with OAN participation"
+    ],
+    "description_es": "La edición realizada en Colombia reunió a la comunidad astronómica latinoamericana. Forma parte de los antecedentes internacionales del Observatorio.",
+    "description_en": "The Colombian edition brought together the Latin American astronomical community and forms part of the Observatory’s international meeting history.",
+    "url": "https://observatorioastronomico.utp.edu.co/participacion-del-oautp-en-el-larim-2016/",
+    "image": null,
+    "status": "past"
+  },
+  {
+    "id": "solar2012",
+    "title": "Escuela Internacional de Astrofísica Solar",
+    "date": "2012-07-03 / 2012-07-19",
+    "place": "Bogotá, Colombia",
+    "role": [
+      "Organización · Observatorio Astronómico Nacional",
+      "Organized by the National Astronomical Observatory"
+    ],
+    "description_es": "Solar Astrophysics: Modern Trends and Techniques. Formación en física solar, observación y análisis de datos dentro de la Escuela Internacional de la UNAL.",
+    "description_en": "Solar Astrophysics: Modern Trends and Techniques. Training in solar physics, observation and data analysis within UNAL’s International School.",
+    "url": "https://agenciadenoticias.unal.edu.co/detalle/estudiar-la-fisica-solar-hace-parte-de-nuestro-vecindario",
+    "image": null,
+    "status": "past"
+  }
+]

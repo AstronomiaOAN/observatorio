@@ -87,3 +87,20 @@ Recorrido de patrimonio actualizado: video de YouTube 9gAK0wLzbLM, embebido en e
 
 ### Reproducción de YouTube / error 153
 YouTube requiere el encabezado HTTP Referer del sitio que lo integra. Se configuró explícitamente `strict-origin-when-cross-origin` en la página de patrimonio y en su iframe. Para la copia descargada, ejecutar `python3 iniciar_web.py` y abrir http://127.0.0.1:8000; o consultar la web publicada. Abrir `dist/index.html` con doble clic permite navegar, pero los archivos file:// no envían esa identificación: en ese caso se muestra un acceso a la web y a YouTube en lugar del reproductor que da error. Extensiones o políticas del navegador que supriman Referer todavía pueden impedir la reproducción. No se ha confirmado reproducción de extremo a extremo en el navegador del usuario.
+
+
+## Directorio de egresados — 2 de octubre de 2026
+
+117 registros: 19 de especialización, 97 de maestría y una egresada del doctorado (María Gracia Batista Rojas). El archivo source/alumni.json contiene únicamente datos académicos depurados. No se distribuyen los Excel originales, documentos de identidad ni datos de contacto personales. Para regenerar ES/EN: python source/build_alumni.py.
+
+Las fechas de especialización son de grado, no de sustentación; dos registros carecen de fecha. Los 75 enlaces de repositorio proceden del listado de maestría suministrado. Los títulos conservan su idioma original. Los perfiles externos se incorporan solo cuando se identificó coincidencia académica.
+
+## Investigación, eventos y divulgación — 2 de octubre de 2026
+
+16 páginas por idioma. Investigación incorpora 179 registros de 1994–2026: 127 artículos, 33 memorias/capítulos y 19 prepublicaciones, con búsqueda y filtros por año y tipo. Cada registro muestra la afiliación explícita al OAN–UNAL, DOI y fuentes. OpenAlex aporta afiliaciones; Crossref, metadatos editoriales. Se corrigieron años de archivos retrospectivos según la edición original. No es una revisión manual de todos los PDF ni un inventario exhaustivo.
+
+Eventos reúne 14 encuentros documentados, distingue organización, participación y eventos relacionados. LARIM2026 es organizado por instituciones mexicanas; la participación documentada de Santiago Vargas corresponde al comité científico de 4WAI. Se incluye LARIM2016 en la memoria histórica.
+
+Navegando por el Cosmos contiene 13 videos verificados y acceso a las listas de las tres temporadas. Las listas permiten consultar la colección completa disponible en YouTube; las 13 fichas son una selección. No se afirma que todos los videos estén catalogados individualmente.
+
+Datos editables: source/publications.json, events.json, cosmos.json. Regenerar estas adiciones con `python3 source/build_research_update.py`. Créditos de imágenes en fuentes.html. La imagen de la sede académica se reserva para la presentación de las dos sedes.
