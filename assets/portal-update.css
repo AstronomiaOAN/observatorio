@@ -11,3 +11,6 @@
 @media(max-width:700px){.adjunct-grid{grid-template-columns:1fr}.adjunct-card{padding:22px}.discovery-card .discovery-visual{height:310px}.discovery-card h3{min-height:0}.adjunct-stats{gap:8px}.adjunct-stats>span{padding:12px 15px}}
 
 .discovery-media .discovery-visual{object-fit:contain;background:#102c40}
+
+/* November update: original photographs, tonal adjustment and crop only. */
+.community-image{display:block;width:100%;height:260px;object-fit:cover;margin:24px 0;border-radius:3px}.archive-crop{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;object-position:center 35%;filter:contrast(1.08) brightness(1.03)}img[src$="observatory-garden.jpg"]{object-fit:cover;object-position:center 44%;filter:contrast(1.05)}.equipment-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.equipment-grid h2{font-size:1.7rem}.equipment-grid .card{padding:30px}@media(max-width:700px){.equipment-grid{grid-template-columns:1fr}.community-image{height:220px}}

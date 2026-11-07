@@ -2,10 +2,10 @@
   {
     "cargo_es": "Dirección Departamento",
     "cargo_en": "Department Director",
-    "nombre": "Mario Armando Higuera Garzón",
-    "correo": "mahiguerag@unal.edu.co",
-    "extension": "11021",
-    "oficina": "413-103"
+    "nombre": "Santiago Vargas Domínguez",
+    "correo": "svargasd@unal.edu.co",
+    "extension": "",
+    "oficina": ""
   },
   {
     "cargo_es": "Dirección Área Curricular",
@@ -42,18 +42,18 @@
   {
     "cargo_es": "Coordinación de Investigación",
     "cargo_en": "Research Coordination",
-    "nombre": "Santiago Vargas Domínguez",
-    "correo": "svargasd@unal.edu.co",
-    "extension": "11022",
-    "oficina": "413-106"
+    "nombre": "Mario Armando Higuera Garzón",
+    "correo": "mahiguerag@unal.edu.co",
+    "extension": "",
+    "oficina": ""
   },
   {
     "cargo_es": "Coordinación de Extensión",
     "cargo_en": "Outreach Coordination",
-    "nombre": "Santiago Vargas Domínguez",
-    "correo": "svargasd@unal.edu.co",
-    "extension": "11022",
-    "oficina": "413-106"
+    "nombre": "Giovanni Pinzón",
+    "correo": "gapinzone@unal.edu.co",
+    "extension": "",
+    "oficina": ""
   },
   {
     "cargo_es": "Acreditación",
@@ -66,10 +66,10 @@
   {
     "cargo_es": "Coordinación de Laboratorios",
     "cargo_en": "Laboratory Coordination",
-    "nombre": "Santiago Vargas Domínguez",
-    "correo": "svargasd@unal.edu.co",
-    "extension": "11022",
-    "oficina": "413-106"
+    "nombre": "Benjamín Calvo Mozo",
+    "correo": "bcalvom@unal.edu.co",
+    "extension": "",
+    "oficina": ""
   },
   {
     "cargo_es": "Comité de Ética",
