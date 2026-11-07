@@ -104,3 +104,11 @@ Eventos reúne 14 encuentros documentados, distingue organización, participaci�
 Navegando por el Cosmos contiene 13 videos verificados y acceso a las listas de las tres temporadas. Las listas permiten consultar la colección completa disponible en YouTube; las 13 fichas son una selección. No se afirma que todos los videos estén catalogados individualmente.
 
 Datos editables: source/publications.json, events.json, cosmos.json. Regenerar estas adiciones con `python3 source/build_research_update.py`. Créditos de imágenes en fuentes.html. La imagen de la sede académica se reserva para la presentación de las dos sedes.
+
+## Actualización del 7 de noviembre de 2026
+
+Se incorporan 9 profesores adjuntos y sus 16 vinculaciones (2023–2026) en `profesores.html` y `en/profesores.html`, conservando los docentes y el directorio anteriores. Datos académicos en `source/adjunct-faculty.json`; no incluye documentos de identidad ni el Excel original. Los periodos 2025-2 con fechas marzo–julio conservan el rótulo del documento y llevan una nota aclaratoria.
+
+Las tarjetas de eSPECTRA, Voces y Visitas tienen imágenes alineadas; la portada de eSPECTRA aumenta de tamaño y se muestra completa. Los estilos están limitados a estas adiciones en `assets/portal-update.css`. Se recuperaron 13 miniaturas de YouTube que contenían mensajes HTML de error. La foto histórica dañada de la portada se sustituye por `historic.jpg`, fotografía ya incluida y acreditada en el portal.
+
+Verificación: conservación de todos los textos y enlaces anteriores en las cuatro páginas editadas; conteo ES/EN de 9 docentes y 16 vinculaciones; integridad de las miniaturas; revisión visual de portada y docentes. Actualización preparada para publicación directa en el repositorio GitHub AstronomiaOAN/observatorio.

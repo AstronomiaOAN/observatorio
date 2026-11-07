@@ -1,0 +1,150 @@
+{
+  "source": "Listado de docentes adjuntos suministrado por el OAN",
+  "updated": "2026-11-07",
+  "appointments": [
+    {
+      "name": "Juan Carlos Martínez Oliveros",
+      "period": "2023-1",
+      "start": "2023-03-06",
+      "end": "2024-03-05",
+      "courses": "Dirección de tesis, trabajos de grado y asesoría académica",
+      "activities": "Actividades de dirección de tesis y trabajos de grado. Actividades de asesoría academica",
+      "resolution": "0545 del 03 de Marzo de 2023 (Acta No05 de 2023)"
+    },
+    {
+      "name": "Juan Camilo Buitrago Casas",
+      "period": "2024-2",
+      "start": "2024-10-28",
+      "end": "2025-03-08",
+      "courses": "Dirección de tesis y trabajo de grado 2018965, Seminario 2018968",
+      "activities": "Actividades de dirección de tesis y trabajos de grado. Actividades de asesoría academica",
+      "resolution": "2606 del 11 de Octubre de 2024 (Acta No32)"
+    },
+    {
+      "name": "José Iván Campos Rozo",
+      "period": "2024-2",
+      "start": "2024-10-28",
+      "end": "2025-03-08",
+      "courses": "Dirección de tesis y trabajo de grado 2018965, seminario 2018968",
+      "activities": "Actividades de dirección de tesis y trabajos de grado. Actividades de asesoría academica",
+      "resolution": "2607 de 11 de Octubre de 2024 (ActaNo32)"
+    },
+    {
+      "name": "Juan Sebastián Hincapié Tarquino",
+      "period": "2024-2",
+      "start": "2024-10-28",
+      "end": "2025-03-08",
+      "courses": "Tópicos selectos en Astronomía y astrofisica 2029203, Seminario 2028968",
+      "activities": "Actividades de dirección de tesis y trabajos de grado. Actividades de asesoría academica",
+      "resolution": "2608 de 11 de Octubre de 2024 (ActaNo32)"
+    },
+    {
+      "name": "Héctor Javier Hortua Orjuela",
+      "period": "2024-2",
+      "start": "2024-10-28",
+      "end": "2025-03-08",
+      "courses": "Dirección de tesis y trabajos de grado 2028155, seminario I 2028150 y seminario II 2028152",
+      "activities": "Actividades de dirección de tesis y trabajos de grado. Actividades de asesoría academica",
+      "resolution": "2609 de 11 de Octubre de 2024 (ActaNo32)"
+    },
+    {
+      "name": "Juan Carlos Martínez Oliveros",
+      "period": "2024-2",
+      "start": "2024-10-28",
+      "end": "2025-03-08",
+      "courses": "Dirección de tesis y trabajo de grado 2018965, seminario 2028968",
+      "activities": "Actividades de dirección de tesis y trabajos de grado. Actividades de asesoría academica",
+      "resolution": "2610 de 11 de Octubre de 2024 (ActaNo32)"
+    },
+    {
+      "name": "José Iván Campos Rozo",
+      "period": "2025-2",
+      "start": "2025-03-31",
+      "end": "2025-07-26",
+      "courses": "Astrofísica Computacional 2028035, codirección de tesis 2018969",
+      "activities": "Actividades de clase. Actividades de asesoría académica. Actividades de dirección de tesis.",
+      "resolution": "0796 de 14 de Marzo de 2025 (Acta12)"
+    },
+    {
+      "name": "Juan Sebastián Hincapié Tarquino",
+      "period": "2025-2",
+      "start": "2025-03-31",
+      "end": "2025-07-26",
+      "courses": "Temas selectos en la enseñanza de la astronomía 2024622, actividades de codirección de tesis 2018969",
+      "activities": "Actividades de clase. Actividades de asesoría académica. Actividades de dirección de tesis.",
+      "resolution": "0797 de 14 de Marzo de 2025 (Acta12)"
+    },
+    {
+      "name": "Jeffersson Andrés Agudelo Rueda",
+      "period": "2025-2",
+      "start": "2025-03-31",
+      "end": "2025-07-26",
+      "courses": "Tópicos selectos en Astronomía y astrofísica 2029203, actividades de codirección de tesis 2018969",
+      "activities": "Actividades de clase. Actividades de dirección de tesis.",
+      "resolution": "0798 de 14 de Marzo de 2025 (Acta12)"
+    },
+    {
+      "name": "José Iván Campos Rozo",
+      "period": "2026-1",
+      "start": "2026-02-02",
+      "end": "2026-05-30",
+      "courses": "Astrofísica Computacional  2028035-01, codirección de tesis 2018969-01",
+      "activities": "Actividades de clase. Actividades de codirección de tesis.",
+      "resolution": "3852 del 09 de Diciembre de 2025 (Acta 58)"
+    },
+    {
+      "name": "Carlos Albertho Benavides Gallego",
+      "period": "2026-1",
+      "start": "2026-02-02",
+      "end": "2026-05-30",
+      "courses": "Agujeros Negros Clásicos 2018037-01",
+      "activities": "Actividades de clase",
+      "resolution": "3853 del 09 de Diciembre de 2025 (Acta 58)"
+    },
+    {
+      "name": "Jonhatan Herney Bernal Salinas",
+      "period": "2026-1",
+      "start": "2026-02-02",
+      "end": "2026-05-30",
+      "courses": "Tópicos selectos en Astronomía y astrofisica 2029203-01",
+      "activities": "Acividades de clase",
+      "resolution": "3854 del 09 de Diciembre de 2025 (Acta 58)"
+    },
+    {
+      "name": "Carlos Albertho Benavides Gallego",
+      "period": "2026-2",
+      "start": "2026-08-27",
+      "end": "2026-12-16",
+      "courses": "Agujeros Negros Clásicos 2018037-01",
+      "activities": "Actividades de clase",
+      "resolution": "1958 del 06 de Agosto de 2026 (Acta 38)"
+    },
+    {
+      "name": "Juan Camilo Buitrago Casas",
+      "period": "2026-2",
+      "start": "2026-08-27",
+      "end": "2026-12-16",
+      "courses": "Temas selectos en Enseñanza de la Astronomia 2024622-01, actividades de codirección de tesis 2018969-01",
+      "activities": "Actividades de clase. Actividades de codirección de tesis",
+      "resolution": "1959 del 06 de Agoato de 2026 (Acta 38)"
+    },
+    {
+      "name": "José Iván Campos Rozo",
+      "period": "2026-2",
+      "start": "2026-08-27",
+      "end": "2026-12-16",
+      "courses": "Astrofísica Computacional  2028035-01, codirección de tesis 2018969-01",
+      "activities": "Actividades de clase. Actividades de codirección de tesis",
+      "resolution": "1960 del 06 de Agosto de 2026 (Acta 38)"
+    },
+    {
+      "name": "Juan Sebastian Castellanos",
+      "period": "2026-2",
+      "start": "2026-08-27",
+      "end": "2026-12-16",
+      "courses": "Astrofísica 2018038-01, codirección de tesis 2018969-01",
+      "activities": "Actividades de clase. Actividades de codirección de tesis",
+      "resolution": "1961 del 06 de Agosto de 2026 (Acta 38)"
+    }
+  ]
+}
