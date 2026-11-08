@@ -23,7 +23,7 @@
       slides[current].classList.remove('is-active');
       slides[next].classList.add('is-active');
       current = next;
-    }, 7000);
+    }, 5000);
   }
   button.addEventListener('click', () => { paused = !paused; sync(); });
   reduced.addEventListener('change', () => { paused = reduced.matches; sync(); });
