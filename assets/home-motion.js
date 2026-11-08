@@ -14,12 +14,16 @@
     button.textContent = paused ? (en ? 'Resume animation' : 'Reanudar animación') : (en ? 'Pause animation' : 'Pausar animación');
     if (paused || document.hidden) return;
     timer = setInterval(() => {
-      const next = (current + 1) % slides.length;
-      if (!slides[next].complete || !slides[next].naturalWidth) return;
+      let next = current;
+      for (let offset = 1; offset < slides.length; offset++) {
+        const candidate = (current + offset) % slides.length;
+        if (slides[candidate].complete && slides[candidate].naturalWidth) { next = candidate; break; }
+      }
+      if (next === current) return;
       slides[current].classList.remove('is-active');
       slides[next].classList.add('is-active');
       current = next;
-    }, 9000);
+    }, 7000);
   }
   button.addEventListener('click', () => { paused = !paused; sync(); });
   reduced.addEventListener('change', () => { paused = reduced.matches; sync(); });
