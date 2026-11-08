@@ -28,3 +28,18 @@ header #navigation{font-size:16px;line-height:1.45;gap:16px}
 .utility-nav{font-size:15px;line-height:1.45;gap:12px 20px}
 header #navigation>a,.utility-nav>a{font-weight:500}
 @media(max-width:1100px){header #navigation{gap:12px}.utility-nav{gap:10px 16px}}
+/* Slow photographic movement with stable text and contrast overlay. */
+.hero-image.hero-slideshow{background:var(--navy);overflow:hidden}
+.hero-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:65% center;opacity:0;transition:opacity 2s ease;animation:hero-drift 24s ease-in-out infinite alternate}
+.hero-slide.is-active{opacity:1}
+.hero-slideshow::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,18,30,.95) 3%,rgba(4,18,30,.76) 43%,rgba(4,18,30,.2) 100%),linear-gradient(0deg,rgba(4,18,30,.75),transparent 60%)}
+.motion-toggle{position:absolute;z-index:2;top:18px;right:5%;padding:9px 14px;border:1px solid #ffffff80;border-radius:4px;background:#071c2cdd;color:#fff;font:inherit;font-size:13px;cursor:pointer}
+.motion-toggle:focus-visible{outline:3px solid #e0bd86;outline-offset:4px}
+.solar-feature .cosmos-collage img{animation:cosmos-drift 18s ease-in-out infinite alternate}
+.solar-feature .cosmos-collage figure:nth-child(2) img{animation-delay:-5s;animation-direction:alternate-reverse}
+.solar-feature .cosmos-collage figure:nth-child(3) img{animation-delay:-10s}
+.solar-feature .cosmos-collage figure:nth-child(4) img{animation-delay:-14s;animation-direction:alternate-reverse}
+@keyframes hero-drift{from{transform:scale(1.02) translateX(-.4%)}to{transform:scale(1.1) translateX(.4%)}}
+@keyframes cosmos-drift{from{transform:scale(1.03) translate(-.5%,.3%)}to{transform:scale(1.13) translate(.8%,-.5%)}}
+.motion-paused .hero-slide,.motion-paused .cosmos-collage img{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){.hero-slide,.solar-feature .cosmos-collage img{animation:none!important}.hero-slide{transition:none}}
